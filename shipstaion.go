@@ -1,26 +1,34 @@
 package main
 
 import (
+	"bytes"
+	"encoding/base64"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/mrmiguu/un"
 )
 
+// weight of whole order/item.
 type weight struct {
 	WeightUnits int
 	Value       float64
 	Units       string
 }
+
+// dimensions demensions of package form shipstaion.
 type dimensions struct {
 	Units  string
 	Length float64
 	Width  float64
 	Height float64
 }
+
+// shipFrom data from where we ship.
 type shipFrom struct {
 	Name        string
 	Company     string
@@ -34,6 +42,8 @@ type shipFrom struct {
 	Phone       interface{}
 	Residential bool
 }
+
+// shipTo address info of customer.
 type shipTo struct {
 	Name        string
 	Company     string
@@ -50,10 +60,10 @@ type shipTo struct {
 
 type labelRes struct {
 	ShipmentID          int
-	OrderID             interface{}
-	UserID              interface{}
-	CustomerEmail       interface{}
-	OrderNumber         interface{}
+	OrderID             int
+	UserID              string
+	CustomerEmail       string
+	OrderNumber         string
 	CreateDate          string
 	ShipDate            string
 	ShipmentCost        float64
@@ -70,7 +80,7 @@ type labelRes struct {
 	VoidDate            interface{}
 	MarketplaceNotified bool
 	NotifyErrorMessage  interface{}
-	ShipTo              interface{}
+	ShipTo              shipTo
 	Weight              weight
 	Dimensions          dimensions
 	InsuranceOptions    interface{}
@@ -80,6 +90,7 @@ type labelRes struct {
 	FormData            interface{}
 }
 
+// shipLable struct POST to shipstaions api for print.
 type shipLable struct {
 	CarrierCode          string
 	ServiceCode          string
@@ -92,13 +103,13 @@ type shipLable struct {
 	ShipTo               shipTo
 	InsuranceOptions     interface{}
 	InternationalOptions interface{}
-	AdvancedOptions      interface{}
+	AdvancedOptions      advancedOptions
 	TestLabel            bool
 }
 
 // Payload is the first level of a ShipStation HTTP response body.
 type payload struct {
-	Orders []order
+	Orders []*order
 	Total  int
 	Page   int
 	Pages  int
@@ -172,7 +183,7 @@ type order struct {
 
 // AdvancedOptions holds the "needed" custom fields for post-email tagging.
 type advancedOptions struct {
-	WarehouseID       int
+	WarehouseID       interface{}
 	NonMachinable     bool
 	SaturdayDelivery  bool
 	ContainsAlcohol   bool
@@ -190,104 +201,120 @@ type advancedOptions struct {
 	BillToCountryCode interface{}
 }
 
+// shipControl controller data for shipstaion calls.
 type shipControl struct {
 	ShipURL  string
 	Username string
 	Password string
+	Client   http.Client
 }
 
+// limits takes requests left and seconds to wait form api header.
 type limits struct {
 	Requests int
 	Seconds  int
 }
 
 var (
-	lim = make(chan limits)
+	lim   = make(chan bool, 1)
+	idMap map[string]*order
 )
 
+// initLimits initiates a new limit for post call to shipstaion.
 func initLimits() {
-	lim <- limits{
-		Requests: 1,
-		Seconds:  0,
-	}
+	lim <- true
 }
 
+// newShipStation initiates new shipstaion controler.
 func newShipStation() *shipControl {
+	client := &http.Client{}
 	return &shipControl{
 		ShipURL:  `https://ssapi.shipstation.com/`,
 		Username: os.Getenv("SHIP_API_KEY"),
 		Password: os.Getenv("SHIP_API_SECRET"),
+		Client:   *client,
 	}
 }
 
-func (s shipControl) getOrders() (*payload, error) {
+func (s shipControl) getOrders(ordIDs []string) ([]*order, error) {
+	orders := []*order{}
+	pay, err := s.ssOrders()
+	if err != nil {
+		return nil, err
+	}
+	if idMap == nil {
+		println("ok")
+		idMap = map[string]*order{}
+		for _, ord := range pay.Orders {
+			idMap[ord.OrderNumber] = ord
+		}
+	}
+	for _, id := range ordIDs {
+		orders = append(orders, idMap[id])
+	}
+	return orders, nil
+}
+
+// getOrders gets awaiting_shipment.
+func (s shipControl) ssOrders() (*payload, error) {
 	pg := 1
 	pay := &payload{}
 	head, err := getPage(pg, pay, s)
 	if err != nil {
 		return pay, err
 	}
-	limit, err := setLimits(head)
+	err = setLimits(head)
 	if err != nil {
 		return pay, err
 	}
-	lim <- limit
 	for pay.Page < pay.Pages {
 		pg++
 		ords := pay.Orders
 		pay = &payload{}
-		limit := <-lim
-		if limit.Requests < 1 {
-			time.Sleep(time.Duration(limit.Seconds) * time.Second)
-		}
-		println("sending pg:", pg)
+		println("limit before")
+		<-lim
+		println("limit after")
 		head, err = getPage(pg, pay, s)
 		if err != nil {
 			return pay, err
 		}
-		println("Done with pg:", pg)
-		limit, err := setLimits(head)
+		err := setLimits(head)
 		if err != nil {
 			return pay, err
 		}
-		lim <- limit
 		pay.Orders = append(ords, pay.Orders...)
 
 	}
 	return pay, nil
 }
 
+// getPage gets the extrea pages of getOrders.
 func getPage(page int, pay *payload, s shipControl) (http.Header, error) {
-	client := http.Client{}
 
-	// make query
+	// make query.
 	query := url.Values(map[string][]string{})
 	query.Set(`page`, strconv.Itoa(page))
 	query.Set(`orderStatus`, `awaiting_shipment`)
 	query.Set(`pageSize`, `500`)
 
-	// make request
+	// make request.
 	req, err := http.NewRequest("GET", s.ShipURL+`orders?`+query.Encode(), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	// set headers and authentication
+	// set headers and authentication.
 	req.Header.Add("Content-Type", "application/json")
-	println(s.Username, s.Password)
 	req.SetBasicAuth(s.Username, s.Password)
 
-	// calling shipstaion
-	resp, err := client.Do(req)
+	// calling shipstaion.
+	resp, err := s.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
-	b, _ := ioutil.ReadAll(resp.Body)
-	println(string(b))
-	panic("panicking")
-	// read response
+	// read response.
 	err = json.NewDecoder(resp.Body).Decode(pay)
 	if err != nil {
 		return nil, err
@@ -296,22 +323,124 @@ func getPage(page int, pay *payload, s shipControl) (http.Header, error) {
 	return resp.Header, nil
 }
 
-func setLimits(head http.Header) (lim limits, err error) {
-	// throttle next call by header
+// setLimits limts api calls based on http.Header.
+func setLimits(head http.Header) error {
+	// throttle next call by header.
 	remaining := head.Get("X-Rate-Limit-Remaining")
 
-	var reqs, secs int
-	reqs, err = strconv.Atoi(remaining)
+	reqs, err := strconv.Atoi(remaining)
 	if err != nil {
-		return
+		return err
 	}
 	reset := head.Get("X-Rate-Limit-Reset")
-	secs, err = strconv.Atoi(reset)
+	secs, err := strconv.Atoi(reset)
 	if err != nil {
-		return
+		return err
 	}
-	lim.Requests = reqs
-	lim.Seconds = secs
-	return
 
+	if reqs < 1 {
+		println("waiting")
+		time.Sleep(time.Duration(secs) * time.Second)
+	}
+	lim <- true
+	return nil
+
+}
+
+func (s shipControl) printLabels(ords []*order) ([][]byte, error) {
+	// initiate limit.
+	initLimits()
+	pd := make([][]byte, len(ords))
+
+	// range over orders for printing.
+	for i, ord := range ords {
+		lr := &labelRes{}
+		<-lim
+
+		head, err := s.printLabel(ord, lr)
+		if err != nil {
+			return nil, err
+		}
+		err = setLimits(head)
+		if err != nil {
+			return nil, err
+		}
+		dec, err := base64.StdEncoding.DecodeString(lr.LabelData)
+		if err != nil {
+			return nil, err
+		}
+		pd[i] = dec
+	}
+	return pd, nil
+}
+
+func (s shipControl) printLabel(ord *order, lr *labelRes) (http.Header, error) {
+
+	shipLab := &shipLable{
+		CarrierCode:  ord.CarrierCode,
+		ServiceCode:  ord.ServiceCode,
+		PackageCode:  ord.PackageCode,
+		Confirmation: ord.Confirmation,
+		ShipDate:     time.Now().Format("2006-01-02"),
+		Weight:       ord.Weight,
+		Dimensions:   ord.Dimensions,
+		ShipFrom: shipFrom{
+			Name:       "Shipping Dept.",
+			Company:    "WedgeNix",
+			Street1:    "1538 Howard Access RD",
+			Street2:    "Unit A",
+			City:       "Upland",
+			State:      "CA",
+			PostalCode: "91786",
+		},
+		ShipTo:    ord.ShipTo,
+		TestLabel: true,
+	}
+	body, err := json.Marshal(shipLab)
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest("POST", "https://ssapi.shipstation.com/shipments/createlabel", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	req.SetBasicAuth(s.Username, s.Password)
+
+	resp, err := s.Client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	un.Wrap(json.NewDecoder(resp.Body).Decode(&lr))
+
+	return resp.Header, nil
+}
+
+func (s shipControl) postCustomFields(ords []*order, sID string) error {
+	for _, ord := range ords {
+		// adding session ID to order data
+		ord.AdvancedOptions.CustomField3 = sID
+	}
+
+	body, err := json.Marshal(ords)
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequest("POST", "https://ssapi.shipstation.com/", bytes.NewBuffer(body))
+	if err != nil {
+		return err
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	req.SetBasicAuth(s.Username, s.Password)
+
+	resp, err := s.Client.Do(req)
+	if err != nil {
+		return err
+	}
+	resp.Body.Close()
+	return nil
 }
