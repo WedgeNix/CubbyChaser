@@ -1,5 +1,7 @@
 package ship
 
+import "github.com/WedgeNix/CubbyChaser-shared"
+
 // shipFrom data from where we ship.
 type shipFrom struct {
 	Name        string
@@ -37,9 +39,9 @@ type labelRes struct {
 	VoidDate            interface{}
 	MarketplaceNotified bool
 	NotifyErrorMessage  interface{}
-	ShipTo              To
-	Weight              Weight
-	Dimensions          Dimensions
+	ShipTo              shared.ShipTo
+	Weight              shared.Weight
+	Dimensions          shared.Dimensions
 	InsuranceOptions    interface{}
 	AdvancedOptions     interface{}
 	ShipmentItems       interface{}
@@ -54,19 +56,19 @@ type shipLable struct {
 	PackageCode          string
 	Confirmation         string
 	ShipDate             string
-	Weight               Weight
-	Dimensions           Dimensions
+	Weight               shared.Weight
+	Dimensions           shared.Dimensions
 	ShipFrom             shipFrom
-	ShipTo               To
+	ShipTo               shared.ShipTo
 	InsuranceOptions     interface{}
 	InternationalOptions interface{}
-	AdvancedOptions      AdvancedOptions
+	AdvancedOptions      shared.AdvancedOptions
 	TestLabel            bool
 }
 
 // payload is the first level of a ShipStation HTTP response body.
 type payload struct {
-	Orders []Order
+	Orders []shared.Order
 	Total  int
 	Page   int
 	Pages  int

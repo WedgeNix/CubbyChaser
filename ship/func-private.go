@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/WedgeNix/CubbyChaser-shared"
 	"github.com/mrmiguu/un"
 )
 
@@ -59,17 +60,17 @@ func (c Control) getPage(page int, pay *payload) (http.Header, error) {
 	query.Set(`pageSize`, `500`)
 
 	// make request.
-	req, err := http.NewRequest("GET", c.ShipURL+`orders?`+query.Encode(), nil)
+	req, err := http.NewRequest("GET", c.shipURL+`orders?`+query.Encode(), nil)
 	if err != nil {
 		return nil, err
 	}
 
 	// set headers and authentication.
 	req.Header.Add("Content-Type", "application/json")
-	req.SetBasicAuth(c.Username, c.Password)
+	req.SetBasicAuth(c.username, c.password)
 
 	// calling shipstaion.
-	resp, err := c.Client.Do(req)
+	resp, err := c.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +109,7 @@ func setLimits(head http.Header) error {
 
 }
 
-func (c Control) printLabel(ord Order, lr *labelRes) (http.Header, error) {
+func (c Control) printLabel(ord shared.Order, lr *labelRes) (http.Header, error) {
 
 	shipLab := &shipLable{
 		CarrierCode:  ord.CarrierCode,
@@ -140,9 +141,9 @@ func (c Control) printLabel(ord Order, lr *labelRes) (http.Header, error) {
 	}
 
 	req.Header.Add("Content-Type", "application/json")
-	req.SetBasicAuth(c.Username, c.Password)
+	req.SetBasicAuth(c.username, c.password)
 
-	resp, err := c.Client.Do(req)
+	resp, err := c.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -152,7 +153,7 @@ func (c Control) printLabel(ord Order, lr *labelRes) (http.Header, error) {
 	return resp.Header, nil
 }
 
-func (c Control) postCustomFields(ords []Order, sID string) error {
+func (c Control) postCustomFields(ords []shared.Order, sID string) error {
 	for i := range ords {
 		// adding session ID to Order data
 		ords[i].AdvancedOptions.CustomField3 = sID
@@ -169,9 +170,9 @@ func (c Control) postCustomFields(ords []Order, sID string) error {
 	}
 
 	req.Header.Add("Content-Type", "application/json")
-	req.SetBasicAuth(c.Username, c.Password)
+	req.SetBasicAuth(c.username, c.password)
 
-	resp, err := c.Client.Do(req)
+	resp, err := c.client.Do(req)
 	if err != nil {
 		return err
 	}

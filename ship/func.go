@@ -3,42 +3,43 @@ package ship
 import (
 	"encoding/base64"
 	"net/http"
-	"os"
+
+	"github.com/WedgeNix/CubbyChaser-shared"
+	"github.com/WedgeNix/util"
 )
 
 // New initiates new shipstaion controller.
 func New() *Control {
-	client := &http.Client{}
 	return &Control{
-		ShipURL:  `https://ssapi.shipstation.com/`,
-		Username: os.Getenv("SHIP_API_KEY"),
-		Password: os.Getenv("SHIP_API_SECRET"),
-		Client:   *client,
+		shipURL:  `https://ssapi.shipstation.com/`,
+		username: util.MustGetenv("SHIP_API_KEY"),
+		password: util.MustGetenv("SHIP_API_SECRET"),
+		client:   http.Client{},
 	}
 }
 
-// GetOrders converts order IDs to a list of orders.
-func (c Control) GetOrders(ids []string) ([]Order, error) {
-	orders := []Order{}
+// GetOrders converts order numbers to a list of orders.
+func (c Control) GetOrders(nums []string) ([]shared.Order, error) {
+	orders := []shared.Order{}
 	pay, err := c.ssOrders()
 	if err != nil {
 		return nil, err
 	}
 	if idMap == nil {
-		println("ok")
-		idMap = map[string]Order{}
+		// println("ok")
+		idMap = map[string]shared.Order{}
 		for _, ord := range pay.Orders {
 			idMap[ord.OrderNumber] = ord
 		}
 	}
-	for _, id := range ids {
-		orders = append(orders, idMap[id])
+	for _, num := range nums {
+		orders = append(orders, idMap[num])
 	}
 	return orders, nil
 }
 
 // PrintLabels creates to-generate files for printing.
-func (c Control) PrintLabels(ords []Order) ([][]byte, error) {
+func (c Control) PrintLabels(ords []shared.Order) ([][]byte, error) {
 	// initiate limit.
 	initLimits()
 	pd := make([][]byte, len(ords))

@@ -13,9 +13,8 @@ func main() {
 	done <- true
 
 	_, session := rest.Bytes()
-	sess, _ := shared.Btos(session())
 
-	println(sess.String())
+	println(shared.Btos(session()).String())
 
 	// for i := range sess.Cubbies {
 	// 	i := i
