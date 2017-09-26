@@ -3,6 +3,8 @@ package session
 import "regexp"
 
 var (
+	wsessionqueue func([]byte)
+
 	sessionLine      = regexp.MustCompile(`(?i)>[^<]*session[^<]*id[^<]*<`)
 	visibleLine      = regexp.MustCompile(`(?i)<table class="[^"]*visible[^"]*">`)
 	idColumnLine     = regexp.MustCompile(`(?i)<th class="text-center">[^<]*\bid\b[^<]*<`)

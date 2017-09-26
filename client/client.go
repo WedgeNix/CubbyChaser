@@ -1,31 +1,25 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/WedgeNix/CubbyChaser-shared"
-	"github.com/mrmiguu/Loading"
+	load "github.com/mrmiguu/Loading"
 	"github.com/mrmiguu/rest"
 )
 
+func init() {
+	rest.Connect("/")
+}
+
 func main() {
-	connection, _ := rest.Bool()
-	done := load.Ing(`connection()`)
-	connection(true)
+	done := load.New("opening session queue channel")
+	_, queue := rest.New(shared.SessionQueueH).Bytes()
 	done <- true
 
-	_, session := rest.Bytes()
+	done = load.New("reading session queue")
+	q := shared.Btoq(queue())
+	done <- true
 
-	println(shared.Btos(session()).String())
-
-	// for i := range sess.Cubbies {
-	// 	i := i
-	// 	_, rCub := rest.Bytes()
-	// 	go func() {
-
-	// 		cub, _ := shared.Btoc(rCub())
-	// 		sess.Cubbies[i] = cub
-	// 	}()
-	// 	// go func() {
-
-	// 	// }()
-	// }
+	fmt.Println(q)
 }
