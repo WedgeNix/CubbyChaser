@@ -3,7 +3,6 @@ package main
 import (
 	"image"
 	"image/jpeg"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -129,14 +128,13 @@ func deliverSession(full shared.Session) {
 	for _, ord := range full.Cubbies {
 		for _, itm := range ord.Items {
 			resp, err := http.Get(itm.ImageURL)
-			var r io.ReadCloser
-			if err == nil {
-				r = resp.Body
+			if err != nil {
+				continue
 			}
 			f, err := os.Create("www/assets/" + fold + "/" + itm.UPC + ".jpg")
 			shared.Must(err)
-			img, _, _ := image.Decode(r)
-			r.Close()
+			img, _, _ := image.Decode(resp.Body)
+			resp.Body.Close()
 			jpeg.Encode(f, resize.Resize(120, 0, img, resize.Bilinear), nil)
 			f.Close()
 		}
