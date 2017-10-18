@@ -42,7 +42,7 @@ function populateSess(data) {
 } 
 
 function fixRip(id) {
-    document.getElementById('sessBar-'+id).querySelector('.ink').classList.remove('animate');
+    document.getElementById('sessBar-'+id).classList.remove('animate');
 }
 
 
