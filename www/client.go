@@ -10,6 +10,7 @@ import (
 	"github.com/WedgeNix/CubbyChaser-shared"
 	"github.com/WedgeNix/CubbyChaser/www/empty"
 	"github.com/gopherjs/gopherjs/js"
+	"github.com/mrmiguu/jsutil"
 	"github.com/mrmiguu/sock"
 )
 
@@ -115,24 +116,20 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 	Cancel := sock.Rbool(SOCKSessionUser)
 	Bail := sock.Rbool(SOCKSessionUser)
 
-	upcc := make(chan string, 1)
+	upcc := make(chan string)
 	upcSKU := getElementById("upc-sku")
-	upcSKU.Set("onkeypress", func(e *js.Object) {
-		go func() {
-			if e.Get("keyCode").Int() == 13 {
-				upcc <- e.Get("target").Get("value").String()
-			}
-		}()
-	})
-	spotc := make(chan string, 1)
+	upcSKU.Set("onkeypress", jsutil.F(func(e ...*js.Object) {
+		if e[0].Get("keyCode").Int() == 13 {
+			upcc <- e[0].Get("target").Get("value").String()
+		}
+	}))
+	spotc := make(chan string)
 	cubby := getElementById("cubby")
-	cubby.Set("onkeypress", func(e *js.Object) {
-		go func() {
-			if e.Get("keyCode").Int() == 13 {
-				spotc <- e.Get("target").Get("value").String()
-			}
-		}()
-	})
+	cubby.Set("onkeypress", jsutil.F(func(e ...*js.Object) {
+		if e[0].Get("keyCode").Int() == 13 {
+			spotc <- e[0].Get("target").Get("value").String()
+		}
+	}))
 
 	for {
 		var upc string
@@ -164,11 +161,11 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 		println("spot:", D000)
 		js.Global.Call("sendToCubby", "assets/"+strconv.Itoa(full.ID)+"/"+upc+".jpg", spot)
 
-		shortCircuit := make(chan bool, 1)
+		shortCircuit := make(chan bool)
 		clickwall := getElementById("clickwall")
 		clickwall.Call("removeAttribute", "hidden")
-		clickwall.Set("onclick", func() { shortCircuit <- true })
-		js.Global.Get("window").Set("onbeforeunload", func() { shortCircuit <- true })
+		clickwall.Set("onclick", jsutil.F(func(_ ...*js.Object) { shortCircuit <- true }))
+		js.Global.Get("window").Set("onbeforeunload", jsutil.F(func(_ ...*js.Object) { shortCircuit <- true }))
 
 	nextLoc:
 		for {
