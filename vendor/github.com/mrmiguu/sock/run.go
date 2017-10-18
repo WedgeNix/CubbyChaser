@@ -22,8 +22,14 @@ func runClient() {
 	Addr = strings.Replace(Addr, "http://", "", 1)
 	Addr = strings.Replace(Addr, "https://", "", 1)
 
+	wsync.Lock()
+	defer wsync.Unlock()
 	ws = js.Global.Get("WebSocket").New("wss://" + Addr + API)
 	ws.Set("binaryType", "arraybuffer")
+
+	ws.Set("onclose", func() {
+		go runClient()
+	})
 
 	f, c := jsutil.C()
 	ws.Set("onopen", f)
@@ -33,7 +39,9 @@ func runClient() {
 		go func(pkt []byte) {
 			err := read(pkt)
 			if err != nil {
+				wsync.Lock()
 				ws.Call("close")
+				wsync.Unlock()
 			}
 		}(js.Global.Get("Uint8Array").New(e.Get("data")).Interface().([]byte))
 	})
