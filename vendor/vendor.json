@@ -98,6 +98,12 @@
 			"revisionTime": "2017-07-11T15:29:39Z"
 		},
 		{
+			"checksumSHA1": "uY0cjuu0uqjTiNfbu+ZEqj6FI8c=",
+			"path": "github.com/nfnt/resize",
+			"revision": "891127d8d1b52734debe1b3c3d7e747502b6c366",
+			"revisionTime": "2016-07-24T20:39:20Z"
+		},
+		{
 			"checksumSHA1": "kZScNEQ20idmssR5L8ynNj0Gsts=",
 			"path": "github.com/ugorji/go/codec",
 			"revision": "5efa3251c7f7d05e5d9704a69a984ec9f1386a40",

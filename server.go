@@ -1,11 +1,16 @@
 package main
 
 import (
+	"image"
+	"image/jpeg"
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"sync"
 	"time"
+
+	"github.com/nfnt/resize"
 
 	"github.com/mrmiguu/sock"
 
@@ -118,6 +123,18 @@ type iSession struct {
 }
 
 func deliverSession(full shared.Session) {
+	fold := strconv.Itoa(full.ID)
+	shared.Must(os.Mkdir("www/assets/"+fold, os.ModeDir))
+	for _, ord := range full.Cubbies {
+		for _, itm := range ord.Items {
+			resp, _ := http.Get(itm.ImageURL)
+			f, err := os.Create("www/assets/" + fold + "/" + itm.UPC + ".jpg")
+			shared.Must(err)
+			img, _, _ := image.Decode(resp.Body)
+			jpeg.Encode(f, resize.Thumbnail(120, 0, img, resize.Bilinear), nil)
+		}
+	}
+
 	SOCKSession := shared.SOCKSession(full.ID)
 	defer sock.Close(SOCKSession)
 

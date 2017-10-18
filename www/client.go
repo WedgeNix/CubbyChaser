@@ -97,7 +97,7 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 
 	qtc = make([]atomic.Value, len(full.Cubbies))
 	js.Global.Call("populateCubbies", full)
-	js.Global.Call("preloadImages", full.Cubbies)
+	// js.Global.Call("preloadImages", full.Cubbies)
 	for spot, orig := range full.Cubbies {
 		updateOrder(spot, sess.Cubbies[spot], orig)
 	}
@@ -162,7 +162,7 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 		D000 := "D" + strings.Repeat("0", 3-len(n)) + n
 
 		println("spot:", D000)
-		js.Global.Call("sendToCubby", full.Cubbies[spot].Item(upc).ImageURL, spot)
+		js.Global.Call("sendToCubby", "assets/"+strconv.Itoa(full.ID)+"/"+upc+".jpg", spot)
 
 		shortCircuit := make(chan bool, 1)
 		clickwall := getElementById("clickwall")
