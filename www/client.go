@@ -156,7 +156,7 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 		}
 
 		n := strconv.Itoa(spot + 1)
-		D000 := "D" + strings.Repeat("0", 3-len(n)) + n
+		D000 := "D" + strings.Repeat("0", 4-len(n)) + n
 
 		println("spot:", D000)
 		js.Global.Call("sendToCubby", "assets/"+strconv.Itoa(full.ID)+"/"+upc+".jpg", spot)

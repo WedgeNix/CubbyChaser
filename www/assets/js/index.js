@@ -227,7 +227,7 @@ function cubbyAssign(e) {
 }
 
 function padSpot(spot) {
-    return 'D'+pad(Number(spot)+1,3)
+    return 'D'+pad(Number(spot)+1,4)
 }
 
 function orderCount(spot, qt, tot) {
