@@ -21,7 +21,7 @@ var (
 
 func init() {
 	document = js.Global.Get("document")
-	sock.Addr = "localhost:5000"
+	sock.Addr = "/"
 }
 
 func populateQueue(q shared.Queue) {

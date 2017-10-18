@@ -27,8 +27,7 @@ func init() {
 		port = "5000"
 	}
 	http.HandleFunc("/createSession", createSession)
-	sock.Addr = "localhost:" + port
-	sock.Rbool("zbc123")
+	sock.Addr = ":" + port
 }
 
 func createSession(w http.ResponseWriter, r *http.Request) {
