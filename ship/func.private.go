@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/WedgeNix/CubbyChaser-shared"
-	"github.com/WedgeNix/warn"
 	"github.com/mrmiguu/un"
 )
 
@@ -66,7 +65,7 @@ func (c Control) getPage(page int, pay *payload) (http.Header, error) {
 	query := url.Values(map[string][]string{})
 	query.Set(`page`, strconv.Itoa(page))
 	if expiredSessions {
-		warn.Do("using expired sessions")
+		// warn.Do("using expired sessions")
 		query.Set(`createDateStart`, time.Now().Add(-672*time.Hour).Format(`2006-01-02`)+` 00:00:00`)
 	} else {
 		query.Set(`orderStatus`, `awaiting_shipment`)
