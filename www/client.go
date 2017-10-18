@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"strconv"
+	"strings"
 	"sync"
 	"sync/atomic"
 
@@ -157,7 +157,10 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 			alert("Wrong UPC/SKU", "No match for <b>"+upc+"</b>; try using SKU or re-enter the UPC")
 			continue
 		}
-		D000 := fmt.Sprintf("D%03d", spot+1)
+
+		n := strconv.Itoa(spot + 1)
+		D000 := "D" + strings.Repeat("0", 3-len(n)) + n
+
 		println("spot:", D000)
 		js.Global.Call("sendToCubby", full.Cubbies[spot].Item(upc).ImageURL, spot)
 
