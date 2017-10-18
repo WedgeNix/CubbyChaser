@@ -131,10 +131,13 @@ func deliverSession(full shared.Session) {
 			if err != nil {
 				continue
 			}
+			img, _, err := image.Decode(resp.Body)
+			resp.Body.Close()
+			if err != nil {
+				continue
+			}
 			f, err := os.Create("www/assets/" + fold + "/" + itm.UPC + ".jpg")
 			shared.Must(err)
-			img, _, _ := image.Decode(resp.Body)
-			resp.Body.Close()
 			jpeg.Encode(f, resize.Resize(120, 0, img, resize.Bilinear), nil)
 			f.Close()
 		}
