@@ -2,6 +2,7 @@ package ship
 
 import (
 	"encoding/base64"
+	"errors"
 	"net/http"
 
 	"github.com/WedgeNix/CubbyChaser-shared"
@@ -21,19 +22,33 @@ func New() *Control {
 // GetOrders converts order numbers to a list of orders.
 func (c Control) GetOrders(nums []string) ([]shared.Order, error) {
 	orders := []shared.Order{}
-	pay, err := c.ssOrders()
-	if err != nil {
-		return nil, err
-	}
-	if idMap == nil {
-		// println("ok")
-		idMap = map[string]shared.Order{}
+
+	var err error
+	idOnce.Do(func() {
+		var pay *payload
+		pay, err = c.ssOrders()
+		if err != nil {
+			return
+		}
 		for _, ord := range pay.Orders {
 			idMap[ord.OrderNumber] = ord
 		}
+	})
+	if err != nil {
+		return nil, err
 	}
+
+	var atLeastOne bool
 	for _, num := range nums {
-		orders = append(orders, idMap[num])
+		ord, exists := idMap[num]
+		if !exists {
+			continue
+		}
+		orders = append(orders, ord)
+		atLeastOne = true
+	}
+	if !atLeastOne {
+		return orders, errors.New("all orders shipped and/or canceled")
 	}
 	return orders, nil
 }

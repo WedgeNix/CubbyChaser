@@ -1,8 +1,13 @@
 package ship
 
-import "github.com/WedgeNix/CubbyChaser-shared"
+import (
+	"sync"
+
+	"github.com/WedgeNix/CubbyChaser-shared"
+)
 
 var (
-	lim   = make(chan bool, 1)
-	idMap map[string]shared.Order
+	lim    = make(chan bool, 1)
+	idOnce sync.Once
+	idMap  = map[string]shared.Order{}
 )

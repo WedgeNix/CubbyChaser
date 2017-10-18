@@ -1,0 +1,22 @@
+{
+  "name": "cubbychaser-material",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WedgeNix/cubbychaser-material.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WedgeNix/cubbychaser-material/issues"
+  },
+  "homepage": "https://github.com/WedgeNix/cubbychaser-material#readme",
+  "dependencies": {
+    "clipboard": "^1.7.1"
+  }
+}

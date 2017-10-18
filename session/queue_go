@@ -1,0 +1,72 @@
+package session
+
+import (
+	"errors"
+
+	shared "github.com/WedgeNix/CubbyChaser-shared"
+	load "github.com/mrmiguu/Loading"
+	"github.com/mrmiguu/rest"
+)
+
+var wqueue func([]byte)
+
+type Queue struct {
+	Add    chan<- int
+	Delete chan<- int
+
+	q shared.Queue
+}
+
+func NewQueue() *Queue {
+	if wqueue != nil {
+		panic("only one queue allowed")
+	}
+	wqueue, _ = rest.New(shared.SessionQueueH).Bytes()
+
+	add := make(chan int)
+	del := make(chan int)
+	q := &Queue{
+		Add:    add,
+		Delete: del,
+		q:      shared.Queue{},
+	}
+	go func() {
+		for {
+			done := load.New("waiting for queue command")
+			select {
+			case sess := <-add:
+				done <- true
+				done := load.New("adding session")
+				shared.Try(q.add(sess))
+				done <- true
+			case sess := <-del:
+				done <- true
+				done := load.New("deleting session")
+				shared.Try(q.delete(sess))
+				done <- true
+			}
+			done = load.New("broadcasting session queue")
+			wqueue(shared.Qtob(q.q))
+			done <- true
+		}
+	}()
+	return q
+}
+
+func (q *Queue) add(id int) error {
+	_, found := q.q[id]
+	if found {
+		return errors.New("session already exists")
+	}
+	q.q[id] = nil
+	return nil
+}
+
+func (q *Queue) delete(id int) error {
+	_, found := q.q[id]
+	if !found {
+		return errors.New("session does not exist")
+	}
+	delete(q.q, id)
+	return nil
+}

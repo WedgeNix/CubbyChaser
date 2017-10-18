@@ -2,69 +2,22 @@ package session
 
 import (
 	"errors"
+	"regexp"
 	"strconv"
 	"strings"
-
-	"github.com/WedgeNix/CubbyChaser-shared"
-	"github.com/WedgeNix/CubbyChaser/ship"
-	load "github.com/mrmiguu/Loading"
-	"github.com/mrmiguu/rest"
 )
 
-func NewQueue() Queue {
-	if wsessionqueue != nil {
-		panic("only one queue allowed")
-	}
-	wsessionqueue, _ = rest.New(shared.SessionQueueH).Bytes()
-
-	add := make(chan shared.Session)
-	del := make(chan shared.Session)
-	q := Queue{
-		Add:    add,
-		Delete: del,
-		s:      map[int]shared.Session{},
-		h:      map[int]*rest.Handler{},
-	}
-	go func() {
-		for {
-			select {
-			case sess := <-add:
-				done := load.New("adding session")
-				shared.Try(q.add(sess))
-				done <- true
-			case sess := <-del:
-				done := load.New("deleting session")
-				shared.Try(q.delete(sess))
-				done <- true
-			}
-			done := load.New("broadcasting session queue")
-			wsessionqueue(shared.Qtob(q.s))
-			done <- true
-		}
-	}()
-	return q
-}
-
-func (q Queue) add(sess shared.Session) error {
-	_, found := q.s[sess.ID]
-	if found {
-		return errors.New("session already exists")
-	}
-	q.s[sess.ID] = sess
-	q.h[sess.ID] = rest.New(shared.SessionH + strconv.Itoa(sess.ID))
-	return nil
-}
-
-func (q Queue) delete(sess shared.Session) error {
-	_, found := q.s[sess.ID]
-	if !found {
-		return errors.New("session does not exist")
-	}
-	delete(q.s, sess.ID)
-	q.h[sess.ID].Close()
-	delete(q.h, sess.ID)
-	return nil
-}
+var (
+	sessionLine      = regexp.MustCompile(`(?i)>[^<]*session[^<]*id[^<]*<`)
+	visibleLine      = regexp.MustCompile(`(?i)<table class="[^"]*visible[^"]*">`)
+	idColumnLine     = regexp.MustCompile(`(?i)<th class="text-center">[^<]*\bid\b[^<]*<`)
+	marketplaceMatch = regexp.MustCompile(`(?i)>[^<]*marketplace[^<]*<`)
+	sessionIDLine    = regexp.MustCompile(`<!-- react-text: [0-9]+ -->[1-9][0-9]*`)
+	sessionIDExpr    = regexp.MustCompile(`[1-9][0-9]*$`)
+	fullyPickedLine  = regexp.MustCompile(`(?i)<!-- react-text: [0-9]+ -->fully.?picked\b`)
+	orderNumberLine  = regexp.MustCompile(`[0-9-]+</figcaption>`)
+	orderNumberExpr  = regexp.MustCompile(`[0-9-]+`)
+)
 
 func ParseIDAndOrderNumbers(html string) (id int, ordNums []string, err error) {
 	if len(html) < 1 {
@@ -133,16 +86,4 @@ func ParseIDAndOrderNumbers(html string) (id int, ordNums []string, err error) {
 	}
 
 	return
-}
-
-func New(id int, ordNums []string) (shared.Session, error) {
-	sess := shared.Session{ID: id}
-
-	ords, err := ship.New().GetOrders(ordNums)
-	if err != nil {
-		return sess, err
-	}
-	sess.Cubbies = ords
-
-	return sess, nil
 }

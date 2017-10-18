@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/WedgeNix/CubbyChaser-shared"
+	"github.com/WedgeNix/warn"
 	"github.com/mrmiguu/un"
 )
 
@@ -19,23 +20,30 @@ func initLimits() {
 
 // ssOrders gets awaiting_shipment.
 func (c Control) ssOrders() (*payload, error) {
+	// done := load.New("ssOrders")
+	// defer func() { done <- true }()
+
 	pg := 1
 	pay := &payload{}
 	head, err := c.getPage(pg, pay)
 	if err != nil {
 		return pay, err
 	}
+	// done <- false
+
 	err = setLimits(head)
 	if err != nil {
 		return pay, err
 	}
+	// done <- false
+
 	for pay.Page < pay.Pages {
 		pg++
 		ords := pay.Orders
 		pay = &payload{}
-		println("limit before")
+		// println("limit before")
 		<-lim
-		println("limit after")
+		// println("limit after")
 		head, err = c.getPage(pg, pay)
 		if err != nil {
 			return pay, err
@@ -47,6 +55,7 @@ func (c Control) ssOrders() (*payload, error) {
 		pay.Orders = append(ords, pay.Orders...)
 
 	}
+	<-lim
 	return pay, nil
 }
 
@@ -56,7 +65,12 @@ func (c Control) getPage(page int, pay *payload) (http.Header, error) {
 	// make query.
 	query := url.Values(map[string][]string{})
 	query.Set(`page`, strconv.Itoa(page))
-	query.Set(`orderStatus`, `awaiting_shipment`)
+	if expiredSessions {
+		warn.Do("using expired sessions")
+		query.Set(`createDateStart`, time.Now().Add(-672*time.Hour).Format(`2006-01-02`)+` 00:00:00`)
+	} else {
+		query.Set(`orderStatus`, `awaiting_shipment`)
+	}
 	query.Set(`pageSize`, `500`)
 
 	// make request.
@@ -87,6 +101,9 @@ func (c Control) getPage(page int, pay *payload) (http.Header, error) {
 
 // setLimits limts api calls based on http.Header.
 func setLimits(head http.Header) error {
+	// done := load.New("setLimits")
+	// defer func() { done <- true }()
+
 	// throttle next call by header.
 	remaining := head.Get("X-Rate-Limit-Remaining")
 
@@ -99,12 +116,17 @@ func setLimits(head http.Header) error {
 	if err != nil {
 		return err
 	}
+	// done <- false
 
 	if reqs < 1 {
 		println("waiting")
 		time.Sleep(time.Duration(secs) * time.Second)
 	}
+	// done <- false
+
 	lim <- true
+	// done <- false
+
 	return nil
 
 }

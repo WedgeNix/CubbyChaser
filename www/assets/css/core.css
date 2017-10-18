@@ -1,0 +1,291 @@
+:root {
+    --main-color: rgb(0, 150, 136);
+    --second-color: rgb(255, 82, 82);
+}
+
+.cubby-mdl-card {
+    width: 155px;
+    min-height: 155px;
+    float: left;
+    margin: 2px;
+    padding: 2px;
+}
+
+#clickwall {
+    width: 100%;
+    height: 100%;
+    overflow:hidden;
+    z-index: 2;
+    position: fixed;
+}
+
+.cubby-done {
+    color: var(--second-color);
+    font-size: 120px;
+    font-weight: 900;
+}
+
+.cubby-side {
+    width: 100%;
+    min-height: 635px;
+}
+
+body {
+    background: #eeeded;
+}
+
+.mdl-cell {
+    float: left;
+}
+
+.mdl-grid {
+    padding: 0px;
+}
+
+.cubby-pad {
+    padding: 1%;
+}
+
+.cubby-warn {
+    background: rgb(255, 82, 82);
+    padding: 0px;
+    width: 100%;
+    height: 80px;
+    text-align: center;
+}
+
+.cubby-warn>i {
+    line-height: -35px;
+    font-size: 62px;
+    color: white;
+    margin-top: 15px;
+}
+
+.dialog-button {
+    width: 300px;
+    align-self: auto;
+}
+
+.mdl-dialog__actions>*:first-child {
+    margin-right: 1em;
+}
+
+#warning-title {
+    color: rgb(255, 82, 82);
+    text-align: center;
+}
+
+.mdl-grid.center-items {
+    justify-content: center;
+}
+
+.imgtit {
+    background: url("/assets/images/cubby.png") center no-repeat;
+    background-size: 35%;
+    background-color: var(--main-color);
+    color: white;
+    padding: 5%;
+    height: 200px;
+}
+
+.login-title {
+    position: absolute;
+    top: 59%;
+    left: 42%;
+}
+
+#firebaseui-auth-container {
+    background-color: var(--main-color);
+}
+
+.mdl-card__title>img {
+    width: 100%;
+    margin-left: auto;
+	margin-right: auto;
+    display: block;
+}
+
+.img-title{
+    height: 0px;
+}
+
+.mdl-card__actions {
+    height: 32px;
+    padding: 0px;
+    margin: 0px;
+    background-size: 35%;
+    background-color: rgba(255, 82, 82, 0.1);
+    pointer-events: none;
+}
+.mdl-card__progress {
+    visibility: hidden;
+    height: 32px;
+    padding: 5px;
+    margin: 0px;
+    background-size: 35%;
+    background-color: rgba(255, 82, 82, 1);
+    pointer-events: none;
+}
+
+.cubby-name {
+    color: rgb(0, 0, 0);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.order-count {
+    font-size: 55px;
+    font-weight: 700;
+    width: 100%;
+    text-align: center;
+    color: var(--second-color);
+}
+
+.accounts{
+    background-image: url("/assets/images/login_cover.jpg");
+    height: 150px;
+    background-size: 100%;
+    padding: 5%;
+}
+.cubby-form{
+    padding: 10%;
+}
+
+.sidebar-user-material-content {
+    text-align: center;
+    padding-top: 10%;
+  }
+  .sidebar-user-material-content > a {
+    display: inline-block;
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  }
+  .sidebar-user-material-content > a > img {
+    height: 80px;
+  }
+  .sidebar-user-material-content > h6 {
+    margin-bottom: 0;
+  }
+  .sidebar-user-material-content > h6,
+  .sidebar-user-material-content > span {
+    color: #fff;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+  }
+  .sidebar-xs .sidebar-user-material-content {
+    display: none;
+  }
+  
+  .img-circle {
+      border-radius: 50%;
+  }
+  .mdl-navigation__link .material-icons {
+    padding-bottom: 5px;
+}
+
+.clear-class {
+    pointer-events: none;
+}
+
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
+    padding-bottom: 10px;
+    padding-left: 20px;
+}
+
+layout__drawer>.mdl-layout-title {
+    padding-left: 20px;
+}
+
+.session-list {
+    width: 30%;
+    top: 30%;
+    position: absolute;
+    background-color: #eeeded;;
+}
+
+.session-grid {
+    padding: 5px;
+    max-height: 250px;
+    overflow: scroll;
+    overflow-y: auto;
+}
+
+.session-card {
+    width: 100%;
+    min-height: 100%;
+    float: left;
+    margin: 2px;
+    padding: 2px;
+}
+
+.rip-session {
+    width: 100%;
+    padding-bottom: 1px;
+}
+
+
+.session-icon {
+    float: left;
+    background: var(--second-color);
+    border-radius: 50%;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 10px;
+    text-align: center;
+    width: 41px;
+}
+.session-title{
+    background-color: var(--main-color);
+    text-align: center;
+    color: white;
+}
+
+h5 {
+    line-height: 41px;
+    margin: 10px;
+    float: left;
+    text-align: left;
+}
+
+
+::-webkit-scrollbar {
+width: 15px;
+}
+
+
+::-webkit-scrollbar-thumb {
+background-color: rgba(0, 0, 0, 0.2); 
+} /* this will style the thumb, ignoring the track */
+
+
+::-webkit-scrollbar-corner {
+visibility: hidden;
+}
+
+li {
+    font-size : 2em;
+    margin: 1em 0;
+}
+
+li > *{
+  display: inline-block;
+  vertical-align: middle;
+  }
+
+  .sess-close{
+    margin: 10px;
+    float: right;
+    width: 200px;
+  }
+
+
+  .dropdown-sess{
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+font-size: 20px;
+line-height: 1;
+letter-spacing: .02em;
+font-weight: 400;
+color:white;
+margin-left: 55px;
+text-transform: capitalize;
+}

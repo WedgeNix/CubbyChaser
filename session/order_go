@@ -1,0 +1,72 @@
+package session
+
+import (
+	"errors"
+	"strconv"
+
+	shared "github.com/WedgeNix/CubbyChaser-shared"
+	load "github.com/mrmiguu/Loading"
+	"github.com/mrmiguu/rest"
+)
+
+var (
+	worders []func([]byte)
+	rorders []func() []byte
+)
+
+type Order struct {
+	Add    chan<- shared.Item
+	Delete chan<- shared.Item
+
+	o    shared.Order
+	perm shared.Order
+}
+
+func NewOrder(final []shared.Order, spot int) *Order {
+	if len(worders) < len(final) {
+		worders = make([]func([]byte), len(final))
+		rorders = make([]func() []byte, len(final))
+	}
+	if worders[spot] != nil {
+		panic("order already created")
+	}
+	worders[spot], rorders[spot] = rest.New(shared.OrderH(spot)).Bytes()
+
+	add := make(chan shared.Item)
+	del := make(chan shared.Item)
+	o := &Order{
+		Add:    add,
+		Delete: del,
+		o:      shared.Order{Items: make([]shared.Item, 0, len(final[spot].Items))},
+		perm:   final[spot],
+	}
+	go func() {
+		for {
+			done := load.New("waiting for order command")
+			select {
+			case itm := <-add:
+				done <- true
+				done := load.New("adding item")
+				err := o.add(itm)
+				if err != nil {
+					println(err)
+					done <- true
+					continue
+				}
+				done <- true
+			}
+			done = load.New("broadcasting order #" + strconv.Itoa(spot))
+			worders[spot](shared.Otob(o.o))
+			done <- true
+		}
+	}()
+	return o
+}
+
+func (o *Order) add(itm shared.Item) error {
+	if len(o.o.Items) == cap(o.perm.Items) {
+		return errors.New("order already full")
+	}
+	o.o.Items = append(o.o.Items, itm)
+	return nil
+}
