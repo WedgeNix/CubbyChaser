@@ -132,7 +132,7 @@ func deliverSession(full shared.Session) {
 			shared.Must(err)
 			img, _, _ := image.Decode(resp.Body)
 			resp.Body.Close()
-			jpeg.Encode(f, resize.Thumbnail(120, 0, img, resize.Bilinear), nil)
+			jpeg.Encode(f, resize.Resize(120, 0, img, resize.Bilinear), nil)
 			f.Close()
 		}
 	}
