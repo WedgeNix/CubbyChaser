@@ -1,0 +1,132 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "8lxQ3ftIPxA5GcGec+qXVRqy7qg=",
+			"path": "github.com/WedgeNix/CubbyChaser-shared",
+			"revision": "2e741b72b5ef2a44a2afc522d60b028d30c42ce8",
+			"revisionTime": "2017-10-18T19:38:34Z"
+		},
+		{
+			"checksumSHA1": "uFMZq2B/PBQDjMD0SOV6nItA5ds=",
+			"path": "github.com/WedgeNix/util",
+			"revision": "dcdf1bc29e196dc0f37239503dee624f61844cff",
+			"revisionTime": "2017-09-22T18:58:33Z"
+		},
+		{
+			"checksumSHA1": "Yx9GsA45rokKPlyHAFYz/+Cr+iM=",
+			"path": "github.com/WedgeNix/warn",
+			"revision": "46f4eaaff42c1d0f21ea919cf448ea4ea54aadf6",
+			"revisionTime": "2017-10-13T16:43:49Z"
+		},
+		{
+			"checksumSHA1": "BhMowD2DIKSd9qq8Pzh7Y3mh2/w=",
+			"path": "github.com/gin-contrib/sse",
+			"revision": "22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae",
+			"revisionTime": "2017-01-09T09:34:21Z"
+		},
+		{
+			"checksumSHA1": "e6esNZ+4TVSpebo8I9r+mROT17Y=",
+			"path": "github.com/gin-gonic/gin",
+			"revision": "65a6dd46a50bd435597b5bcababd1b2a811c9073",
+			"revisionTime": "2017-07-12T11:02:00Z"
+		},
+		{
+			"checksumSHA1": "3w/h0Xk4pelMe2VZluFDvqv+/n0=",
+			"path": "github.com/gin-gonic/gin/binding",
+			"revision": "65a6dd46a50bd435597b5bcababd1b2a811c9073",
+			"revisionTime": "2017-07-12T11:02:00Z"
+		},
+		{
+			"checksumSHA1": "lxwWzYWn0oZRRpPgEtcgqxcvR20=",
+			"path": "github.com/gin-gonic/gin/render",
+			"revision": "65a6dd46a50bd435597b5bcababd1b2a811c9073",
+			"revisionTime": "2017-07-12T11:02:00Z"
+		},
+		{
+			"checksumSHA1": "cAOtb8Ni26iTpUnv3T0TWl3uYHU=",
+			"path": "github.com/golang/protobuf/proto",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "+uvL6lrIFyv9OZ9OxIGBYR469eU=",
+			"path": "github.com/gopherjs/gopherjs/js",
+			"revision": "415225646bb92c4449bb484646f2c95a98402f6f",
+			"revisionTime": "2017-09-27T19:27:36Z"
+		},
+		{
+			"checksumSHA1": "4mai1Q1zl5QTW2VwJnfQ6r/vlJw=",
+			"path": "github.com/gorilla/websocket",
+			"revision": "a69d9f6de432e2c6b296a947d8a5ee88f68522cf",
+			"revisionTime": "2017-07-18T20:23:41Z"
+		},
+		{
+			"checksumSHA1": "TLS7SAssMFxHEV4fG+NX7wKCXnQ=",
+			"path": "github.com/json-iterator/go",
+			"revision": "8b0360418449ea45a97fd198b3ee29dcbf4dca65",
+			"revisionTime": "2017-07-13T11:01:45Z"
+		},
+		{
+			"checksumSHA1": "rCNfFpeYqd2Tpi5qOFX8ckaQcMU=",
+			"path": "github.com/mattn/go-isatty",
+			"revision": "fc9e8d8ef48496124e79ae0df75490096eccf6fe",
+			"revisionTime": "2017-03-22T23:44:13Z"
+		},
+		{
+			"checksumSHA1": "xGawre7StD/AS5vTRsFrP0gCZiA=",
+			"path": "github.com/mrmiguu/Loading",
+			"revision": "1faf490e34f8b5a8175f7fd752e23665a6cfebad",
+			"revisionTime": "2017-10-11T19:00:44Z"
+		},
+		{
+			"checksumSHA1": "IfgzRHpoQgodi4cyHolgp6ky4Xk=",
+			"path": "github.com/mrmiguu/jsutil",
+			"revision": "3ec56f2a4920f9abaae4eaa0e796364101291ebd",
+			"revisionTime": "2017-10-16T23:33:43Z"
+		},
+		{
+			"checksumSHA1": "hkX3PwplxNMMvXrLpXrNVw/uxZs=",
+			"path": "github.com/mrmiguu/sock",
+			"revision": "5e9463a36a6edbf1ed35fac6b76fe2ea890546a3",
+			"revisionTime": "2017-10-18T18:08:14Z"
+		},
+		{
+			"checksumSHA1": "KOTws0uaT7kYLPDZ2M3aSBXPZ6E=",
+			"path": "github.com/mrmiguu/un",
+			"revision": "de258a49394fe7e202711f7ca03e46badaa6f1f6",
+			"revisionTime": "2017-07-11T15:29:39Z"
+		},
+		{
+			"checksumSHA1": "kZScNEQ20idmssR5L8ynNj0Gsts=",
+			"path": "github.com/ugorji/go/codec",
+			"revision": "5efa3251c7f7d05e5d9704a69a984ec9f1386a40",
+			"revisionTime": "2017-06-20T10:48:52Z"
+		},
+		{
+			"checksumSHA1": "L0i3W5A4DlPYT648m6tewQZElvk=",
+			"path": "gopkg.in/alexcesaro/quotedprintable.v3",
+			"revision": "2caba252f4dc53eaf6b553000885530023f54623",
+			"revisionTime": "2015-07-16T17:19:45Z"
+		},
+		{
+			"checksumSHA1": "QSy5NJwFICKehDsWtfHbcVjIZ+o=",
+			"path": "gopkg.in/go-playground/validator.v8",
+			"revision": "5f57d2222ad794d0dffb07e664ea05e2ee07d60c",
+			"revisionTime": "2016-07-18T13:41:25Z"
+		},
+		{
+			"checksumSHA1": "Q24+t5ryUvt5JJPtPKim1q8hwmI=",
+			"path": "gopkg.in/gomail.v2",
+			"revision": "81ebce5c23dfd25c6c67194b37d3dd3f338c98b1",
+			"revisionTime": "2016-04-11T21:29:32Z"
+		},
+		{
+			"checksumSHA1": "BPyvcdtet4WGesF4j/vSIkTanUw=",
+			"path": "gopkg.in/yaml.v2",
+			"revision": "1be3d31502d6eabc0dd7ce5b0daab022e14a5538",
+			"revisionTime": "2017-07-12T05:45:46Z"
+		}
+	],
+	"rootPath": "github.com/WedgeNix/CubbyChaser"
+}
