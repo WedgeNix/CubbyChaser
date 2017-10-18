@@ -3,6 +3,7 @@ package sock
 import (
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gorilla/websocket"
@@ -18,7 +19,10 @@ func run() {
 }
 
 func runClient() {
-	ws = js.Global.Get("WebSocket").New("ws://" + Addr + API)
+	Addr = strings.Replace(Addr, "http://", "", 1)
+	Addr = strings.Replace(Addr, "https://", "", 1)
+
+	ws = js.Global.Get("WebSocket").New("wss://" + Addr + API)
 	ws.Set("binaryType", "arraybuffer")
 
 	f, c := jsutil.C()
