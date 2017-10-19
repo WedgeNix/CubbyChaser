@@ -110,13 +110,16 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 		go syncOrder(id, spot, full.Cubbies[spot], bail)
 	}
 
-	getElementById("end-sess").Set("onclick", func() { Kill <- true })
+	getElementById("delete-sess").Set("onclick", func() { Kill <- true })
 
 	UPC := sock.Wstring(SOCKSessionUser)
 	Spot := sock.Rint(SOCKSessionUser)
 	Put := sock.Wbool(SOCKSessionUser)
 	Cancel := sock.Rbool(SOCKSessionUser)
 	Bail := sock.Rbool(SOCKSessionUser)
+	Leave := sock.Wbool(SOCKSessionUser)
+
+	getElementById("exit-sess").Set("onclick", func() { Leave <- true })
 
 	upcc := make(chan string)
 	upcSKU := getElementById("upc-sku")

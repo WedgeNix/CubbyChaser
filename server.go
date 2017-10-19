@@ -227,6 +227,7 @@ func assistUser(full shared.Session, uid int, sess *iSession, Ords []chan<- []by
 	Put := sock.Rbool(SOCKSessionUser)
 	Cancel := sock.Wbool(SOCKSessionUser)
 	Bail := sock.Wbool(SOCKSessionUser)
+	Leave := sock.Rbool(SOCKSessionUser)
 
 nextUPC:
 	for {
@@ -234,6 +235,8 @@ nextUPC:
 		select {
 		case <-kill:
 			Bail <- true
+			return
+		case <-Leave:
 			return
 		case upc = <-UPC:
 		}
