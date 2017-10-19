@@ -75,19 +75,24 @@ func main() {
 }
 
 func joinSession(id int) {
-	println(`joinSession`)
+	done := load.New(`joinSession`)
+
 	SOCKSession := shared.SOCKSession(id)
 	defer sock.Close(SOCKSession)
 
 	Kill := sock.Wbool(SOCKSession)
+	done <- false
 	UID := sock.Wint(SOCKSession)
+	done <- false
 	Found := sock.Rbool(SOCKSession)
+	done <- false
 
 	var uid int
 	for gen := true; gen; gen = <-Found {
 		uid = rand.Int()
 		UID <- uid
 	}
+	done <- true
 
 	manuallyPopulateCubbies(id, uid, Kill)
 }
