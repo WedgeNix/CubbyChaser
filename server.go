@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"strconv"
 	"sync"
 	"time"
 
@@ -69,10 +68,13 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 		}
 		done <- false
 
-		fold := strconv.Itoa(sess.ID)
-		shared.Must(os.MkdirAll("www/assets/"+fold, os.ModePerm))
+		shared.Must(os.MkdirAll("www/assets/temp_pics", os.ModePerm))
 		for _, ord := range sess.Cubbies {
 			for _, itm := range ord.Items {
+				file := "www/assets/temp_pics/" + itm.UPC + ".jpg"
+				if _, err := os.Stat(file); !os.IsNotExist(err) {
+					continue
+				}
 				resp, err := http.Get(itm.ImageURL)
 				if err != nil {
 					continue
@@ -82,7 +84,7 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 				if err != nil {
 					continue
 				}
-				f, err := os.Create("www/assets/" + fold + "/" + itm.UPC + ".jpg")
+				f, err := os.Create(file)
 				shared.Must(err)
 				jpeg.Encode(f, resize.Resize(120, 0, img, resize.Bilinear), nil)
 				f.Close()
