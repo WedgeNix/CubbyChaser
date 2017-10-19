@@ -7,6 +7,8 @@ import (
 	"sync"
 	"sync/atomic"
 
+	"github.com/mrmiguu/Loading"
+
 	"github.com/WedgeNix/CubbyChaser-shared"
 	"github.com/WedgeNix/CubbyChaser/www/empty"
 	"github.com/gopherjs/gopherjs/js"
@@ -91,14 +93,18 @@ func joinSession(id int) {
 }
 
 func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
-	println(`manuallyPopulateCubbies`)
+	done := load.New(`manuallyPopulateCubbies`)
+
 	SOCKSessionUser := shared.SOCKSessionUser(id, uid)
 	defer sock.Close(SOCKSessionUser)
 
 	Sess := sock.Rbytes(SOCKSessionUser)
 	full := shared.Bytes2session(<-Sess)
+	done <- false
 	sess := shared.Bytes2session(<-Sess)
+	done <- false
 	println(sess.String())
+	done <- true
 
 	qtc = make([]atomic.Value, len(full.Cubbies))
 	js.Global.Call("populateCubbies", full)
