@@ -210,24 +210,34 @@ func deliverSession(full shared.Session) {
 }
 
 func assistUser(full shared.Session, uid int, sess *iSession, Ords []chan<- []byte, kill <-chan bool) {
-	println(`[[Assisting a new user]]`)
+	done := load.New(`[[Assisting a new user]]`)
 
 	SOCKSessionUser := shared.SOCKSessionUser(full.ID, uid)
 	defer sock.Close(SOCKSessionUser)
 
 	Sess := sock.Wbytes(SOCKSessionUser)
+	done <- false
 	Sess <- shared.Session2bytes(full)
+	done <- false
 	sess.Lock()
 	s := sess.shared
+	done <- false
 	sess.Unlock()
 	Sess <- shared.Session2bytes(s)
+	done <- false
 
 	UPC := sock.Rstring(SOCKSessionUser)
+	done <- false
 	Spot := sock.Wint(SOCKSessionUser)
+	done <- false
 	Put := sock.Rbool(SOCKSessionUser)
+	done <- false
 	Cancel := sock.Wbool(SOCKSessionUser)
+	done <- false
 	Bail := sock.Wbool(SOCKSessionUser)
+	done <- false
 	Leave := sock.Rbool(SOCKSessionUser)
+	done <- true
 
 nextUPC:
 	for {
