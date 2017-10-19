@@ -73,6 +73,7 @@ func main() {
 }
 
 func joinSession(id int) {
+	println(`joinSession`)
 	SOCKSession := shared.SOCKSession(id)
 	defer sock.Close(SOCKSession)
 
@@ -90,6 +91,7 @@ func joinSession(id int) {
 }
 
 func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
+	println(`manuallyPopulateCubbies`)
 	SOCKSessionUser := shared.SOCKSessionUser(id, uid)
 	defer sock.Close(SOCKSessionUser)
 
