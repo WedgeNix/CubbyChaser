@@ -95,7 +95,25 @@ func joinSession(id int) {
 	}
 	done <- true
 
+	SOCKUID := strconv.Itoa(uid)
+	Ping, Pong := sock.Wbool(SOCKUID), sock.Rbool(SOCKUID)
+	defer sock.Close(SOCKUID)
+	complete := make(chan bool)
+
+	go func() {
+		for {
+			Ping <- true
+			select {
+			case <-complete:
+				println("[completed pinging this session]")
+				return
+			case <-Pong:
+			}
+		}
+	}()
+
 	manuallyPopulateCubbies(id, uid, Kill)
+	complete <- true
 }
 
 func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
