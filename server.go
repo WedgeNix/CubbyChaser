@@ -72,10 +72,10 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 		}
 		done <- false
 
-		shared.Must(os.MkdirAll("www/assets/temp_pics", os.ModePerm))
+		shared.Must(os.MkdirAll("www/"+shared.PictureFolder, os.ModePerm))
 		for _, ord := range sess.Cubbies {
 			for _, itm := range ord.Items {
-				file := "www/assets/temp_pics/" + itm.UPC + ".jpg"
+				file := "www/" + shared.PictureFolder + "/" + itm.UPC + ".jpg"
 				if _, err := os.Stat(file); !os.IsNotExist(err) {
 					continue
 				}

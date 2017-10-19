@@ -160,7 +160,7 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 		D000 := "D" + strings.Repeat("0", 4-len(n)) + n
 
 		println("spot:", D000)
-		js.Global.Call("sendToCubby", "assets/"+strconv.Itoa(full.ID)+"/"+upc+".jpg", spot)
+		js.Global.Call("sendToCubby", shared.PictureFolder+"/"+upc+".jpg", spot)
 
 		shortCircuit := make(chan bool)
 		clickwall := getElementById("clickwall")

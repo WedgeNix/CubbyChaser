@@ -3,10 +3,10 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "8lxQ3ftIPxA5GcGec+qXVRqy7qg=",
+			"checksumSHA1": "iGGN4OHYVZZQ6L5SJYxc/tfKJkE=",
 			"path": "github.com/WedgeNix/CubbyChaser-shared",
-			"revision": "2e741b72b5ef2a44a2afc522d60b028d30c42ce8",
-			"revisionTime": "2017-10-18T19:38:34Z"
+			"revision": "5380630e4d7eb7921e3ae0101a5b728ae976d33a",
+			"revisionTime": "2017-10-19T16:25:36Z"
 		},
 		{
 			"checksumSHA1": "uFMZq2B/PBQDjMD0SOV6nItA5ds=",
