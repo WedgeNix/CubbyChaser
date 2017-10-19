@@ -5,10 +5,11 @@
     <title>Cubby Chaser</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico" />
+
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
-    
+
     <script src="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.js"></script>
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.css" />
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-red.min.css">
@@ -16,33 +17,31 @@
     <link rel="stylesheet" href="assets/css/core.css">
     <link rel="stylesheet" href="assets/css/animation.css">
     <script src="assets/js/index.js"></script>
-    
-</head>
 
+</head>
 <body>
-    
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
+        <header class="mdl-layout__header" >
+            <div class="mdl-layout__header-row" >
                 <!-- Title -->
                 <span class="mdl-layout-title">Cubby Chaser</span>
                 <!-- Add spacer, to align navigation to the right -->
                 <!-- Navigation. We hide it in small screens. -->
-                <button id="sess-drop-down" class="mdl-button mdl-js-button mdl-button" style="float:right; margin-right:25px">
+                <button id="sess-drop-down" class="mdl-button mdl-js-button mdl-button" style="float:right; margin-left:55px">
                     <!-- <i class="material-icons">more_vert</i> -->
-                    <span id="sess-drop"class="dropdown-sess"><i class="material-icons">keyboard_arrow_down</i> Sessions </span>
+                    <span id="sess-drop" class="dropdown-sess">
+                        <i class="material-icons">keyboard_arrow_down</i> Sessions </span>
                 </button>
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="sess-drop-down">
                     <li id="show-sess" class="mdl-menu__item" onclick="showSesses()">
                         <i class="material-icons">open_in_new</i> New Session </li>
-                        <li disabled class="mdl-menu__item" id="end-sess">
-                            <i class="material-icons">clear</i> End Session</li>
+                    <li disabled class="mdl-menu__item" id="end-sess" onclick="endSessDialog()">
+                        <i class="material-icons">clear</i> End Session</li>
                     <li disabled class="mdl-menu__item">Custom Session</li>
                 </ul>
                 <nav class="mdl-navigation mdl-layout--large-screen-only">
                 </nav>
             </div>
-
         </header>
 
         <main class="mdl-layout__content">
@@ -54,20 +53,16 @@
                                 <a class="legitRipple">
                                     <img id="display-image" src="assets/images/placeholder.jpg" class="img-circle img-responsive" alt="">
                                 </a>
-                                <h6><span id="dislplay-name"></span><button id="user-drop-down"
-                                    class="mdl-button mdl-js-button mdl-button--icon" style="float:right">
-                              <i class="material-icons">more_vert</i>
-                            </button></h6>
-                   
-                        
-                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                            for="user-drop-down">
-                          <li class="mdl-menu__item" onclick="logout()"><i class="material-icons">power_settings_new</i> logout</li>
-
-                        </ul>
-
-
-
+                                <h6>
+                                    <span id="dislplay-name"></span>
+                                    <button id="user-drop-down" class="mdl-button mdl-js-button mdl-button--icon" style="float:right">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+                                </h6>
+                                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="user-drop-down">
+                                    <li class="mdl-menu__item" onclick="logout()">
+                                        <i class="material-icons">power_settings_new</i> logout</li>
+                                </ul>
                             </div>
                         </div>
                         <div class="cubby-form">
@@ -78,7 +73,7 @@
                                     <label class="mdl-textfield__label" for="upc-sku">UPC/SKU</label>
                                 </div>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                    <input class="mdl-textfield__input" type="text" id="cubby" pattern="[Dd][0-9]{3,}" onkeypress="return cubbyAssign(event)">
+                                    <input class="mdl-textfield__input" type="text" id="cubby" pattern="[Dd][0-9]{3,}">
                                     <label class="mdl-textfield__label" for="cubby">Cubby</label>
                                     <span class="mdl-textfield__error">Invalid Cubby!</span>
                                 </div>
@@ -95,12 +90,35 @@
                                 <p id="warning-message"></p>
                             </div>
                             <div class="mdl-dialog__actions">
-                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent dialog-button" onclick="closeDialog()">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent dialog-button" onclick="closeWarn()">
                                     close
                                 </button>
                             </div>
                         </dialog>
                         <!-- end of wrong upc or cubby dialog popup -->
+
+                        <!-- session end dialog -->
+                        <dialog id="session-end" class="mdl-dialog" style="padding:0px;">
+                            <div class="session-end">
+                                <i class="material-icons session-end">warning</i>
+                            </div>
+                            <h3 class="mdl-dialog__title session-title" style="padding:0">Sessions Ending</h3>
+                            <div class="mdl-dialog__content">
+                                <span>Would you like to delete the current session for everyone?</span>
+                               
+                                <button id="delete-sess" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-button--raised" onclick="alert('DELETE')">
+                                    delete
+                                </button>
+                                <button id="cancel-end" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--raised right-side" style="margin-left: 10px;" onclick="closeEnd()">
+                                        cancel
+                                    </button>
+                                    <button id="exit-sess" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary mdl-button--raised right-side" onclick="alert('EXIT')">
+                                        exit
+                                    </button>
+                            </div>
+                        </dialog>
+                        <!-- end of session end dialog -->
+
                         <!-- session dialog -->
                         <dialog id="session-dialog" class="mdl-dialog session-list" style="padding:0px;">
                             <h3 class="mdl-dialog__title session-title">Active Sessions</h3>
@@ -111,11 +129,8 @@
                             </button>
                         </dialog>
                         <!-- end of session dialog -->
-
                     </div>
                 </div>
-
-
                 <div id="cubbies" class="mdl-cell mdl-cell--9-col">
                     <div id="clickwall" hidden></div>
                     <div class="content-grid mdl-grid">
@@ -165,7 +180,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="content-grid mdl-grid">
                         <div id="rip-D0006" class="ripplelink">
                             <div id="D0006" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
@@ -213,7 +227,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="content-grid mdl-grid">
                         <div id="rip-D0011" class="ripplelink">
                             <div id="D0011" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
@@ -261,7 +274,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="content-grid mdl-grid">
                         <div id="rip-D0016" class="ripplelink">
                             <div id="D0016" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
@@ -313,13 +325,7 @@
             </div>
         </main>
     </div>
-
-   
-
     <script src="node_modules/clipboard/dist/clipboard.min.js"></script>
     <script src="client.js"></script>
-    
-
 </body>
-
 </html>

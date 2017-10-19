@@ -14,7 +14,7 @@
 #clickwall {
     width: 100%;
     height: 100%;
-    overflow:hidden;
+    overflow: hidden;
     z-index: 2;
     position: fixed;
 }
@@ -47,13 +47,35 @@ body {
 }
 
 .cubby-warn {
-    background: rgb(255, 82, 82);
+    background: var(--second-color);
     padding: 0px;
     width: 100%;
     height: 80px;
     text-align: center;
 }
 
+.mdl-dialog__content>button{
+    margin-top: 15px;
+}
+
+#session-end{
+    width:30%;
+}
+
+.right-side{
+    float: right;
+}
+.session-end {
+    background: var(--main-color);
+    padding: 0px;
+    width: 100%;
+    height: 80px;
+    text-align: center;
+}
+
+
+
+.session-end>i,
 .cubby-warn>i {
     line-height: -35px;
     font-size: 62px;
@@ -101,11 +123,11 @@ body {
 .mdl-card__title>img {
     width: 100%;
     margin-left: auto;
-	margin-right: auto;
+    margin-right: auto;
     display: block;
 }
 
-.img-title{
+.img-title {
     height: 0px;
 }
 
@@ -117,6 +139,7 @@ body {
     background-color: rgba(255, 82, 82, 0.1);
     pointer-events: none;
 }
+
 .mdl-card__progress {
     visibility: hidden;
     height: 32px;
@@ -141,44 +164,51 @@ body {
     color: var(--second-color);
 }
 
-.accounts{
+.accounts {
     background-image: url("/assets/images/login_cover.jpg");
     height: 150px;
     background-size: 100%;
     padding: 5%;
 }
-.cubby-form{
+
+.cubby-form {
     padding: 10%;
 }
 
 .sidebar-user-material-content {
     text-align: center;
     padding-top: 10%;
-  }
-  .sidebar-user-material-content > a {
+}
+
+.sidebar-user-material-content>a {
     display: inline-block;
     -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  }
-  .sidebar-user-material-content > a > img {
+}
+
+.sidebar-user-material-content>a>img {
     height: 80px;
-  }
-  .sidebar-user-material-content > h6 {
+}
+
+.sidebar-user-material-content>h6 {
     margin-bottom: 0;
-  }
-  .sidebar-user-material-content > h6,
-  .sidebar-user-material-content > span {
+}
+
+.sidebar-user-material-content>h6,
+.sidebar-user-material-content>span {
     color: #fff;
     text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
-  }
-  .sidebar-xs .sidebar-user-material-content {
+}
+
+.sidebar-xs .sidebar-user-material-content {
     display: none;
-  }
-  
-  .img-circle {
-      border-radius: 50%;
-  }
-  .mdl-navigation__link .material-icons {
+}
+
+.img-circle {
+    border-radius: 50%;
+}
+
+.mdl-navigation__link .material-icons {
     padding-bottom: 5px;
 }
 
@@ -199,7 +229,8 @@ layout__drawer>.mdl-layout-title {
     width: 30%;
     top: 30%;
     position: absolute;
-    background-color: #eeeded;;
+    background-color: #eeeded;
+    ;
 }
 
 .session-grid {
@@ -222,7 +253,6 @@ layout__drawer>.mdl-layout-title {
     padding-bottom: 1px;
 }
 
-
 .session-icon {
     float: left;
     background: var(--second-color);
@@ -234,7 +264,8 @@ layout__drawer>.mdl-layout-title {
     text-align: center;
     width: 41px;
 }
-.session-title{
+
+.session-title {
     background-color: var(--main-color);
     text-align: center;
     color: white;
@@ -247,45 +278,43 @@ h5 {
     text-align: left;
 }
 
-
 ::-webkit-scrollbar {
-width: 15px;
+    width: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 
-::-webkit-scrollbar-thumb {
-background-color: rgba(0, 0, 0, 0.2); 
-} /* this will style the thumb, ignoring the track */
-
+/* this will style the thumb, ignoring the track */
 
 ::-webkit-scrollbar-corner {
-visibility: hidden;
+    visibility: hidden;
 }
 
 li {
-    font-size : 2em;
+    font-size: 2em;
     margin: 1em 0;
 }
 
-li > *{
-  display: inline-block;
-  vertical-align: middle;
-  }
+li>* {
+    display: inline-block;
+    vertical-align: middle;
+}
 
-  .sess-close{
+.sess-close {
     margin: 10px;
     float: right;
     width: 200px;
-  }
+}
 
-
-  .dropdown-sess{
-    font-family: "Roboto","Helvetica","Arial",sans-serif;
-font-size: 20px;
-line-height: 1;
-letter-spacing: .02em;
-font-weight: 400;
-color:white;
-margin-left: 55px;
-text-transform: capitalize;
+.dropdown-sess {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: .02em;
+    font-weight: 400;
+    color: white;
+    text-transform: capitalize;
 }

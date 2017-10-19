@@ -16,14 +16,14 @@ firebase.auth().onAuthStateChanged(function (user) {
         if (win.includes("main")) {
             window.location.href = "index.html";
         }
-        return
+        return;
     }
     if (!win.includes("main")) {
         window.location.href = "main.html";
     }
-    document.getElementById('display-image').src = user.photoURL
-	document.getElementById('dislplay-name').innerText = user.displayName
-    User = user
+    document.getElementById('display-image').src = user.photoURL;
+	document.getElementById('dislplay-name').innerText = user.displayName;
+    User = user;
 });
 // }
 
@@ -92,7 +92,6 @@ function pad(n, width, z) {
   }
 
 function populateCubbies(full) {
-    // clearCubbies();
     for (var i in full.Cubbies) {
         var loc = padSpot(i);
         document.getElementById("rip-" + loc).setAttribute("data-clipboard-text", full.Cubbies[i].OrderNumber);
@@ -102,7 +101,7 @@ function populateCubbies(full) {
     document.getElementById("show-sess").setAttribute("disabled", '');
     closeSess();
     fixRip(full.ID);
-    go2you()
+    go2you();
 }
 
 function clearCubbies(){
@@ -129,31 +128,11 @@ function logout() {
     });
 }
 
-// function skpcSearch(e) {
-//     if (e.keyCode == 13) {
-//         var skupc = document.getElementById("upc-sku");
-//         // Replace with function to server
-//         console.log(skupc.value);
-//         order = fakeSend(skupc.value, User.email);
-//         // Replace above
-//         if (!order) {
-//             cubbyLoc = 0;
-//             alertMaterial(skupc);
-//             skupc.focus();
-//             return false;
-//         }
-//         sendToCubby(spot, sess, full);
-//         document.getElementById("cubby").focus();
-//         return false;
-//     }
-// }
-
 function preloadImages(cubs) {
     for (var s in cubs) {
         for (var i in cubs[s].Items) {
             var f = new Image();
-            f.src = cubs[s].Items[i].ImageURL
-            // console.log(f.src)
+            f.src = cubs[s].Items[i].ImageURL;
         }
     }
 }
@@ -162,7 +141,7 @@ function sendToCubby(img, spot) {
     go2cub();
     var loc = padSpot(spot);
 
-    document.getElementById("prog-" + loc).style.visibility = 'hidden'
+    document.getElementById("prog-" + loc).style.visibility = 'hidden';
     
     var cub = document.getElementById(loc);
     var cubImg = document.getElementById("img-" + loc);
@@ -174,66 +153,36 @@ function sendToCubby(img, spot) {
 }
 
 function go2you() {
-    var upcSKU = document.getElementById("upc-sku")
-    upcSKU.value = ''
-    document.getElementById("cubby").value = ''
-    upcSKU.focus()
+    var upcSKU = document.getElementById("upc-sku");
+    upcSKU.value = '';
+    document.getElementById("cubby").value = '';
+    upcSKU.focus();
 }
 function clryou() {
-    document.getElementById("upc-sku").value = ''
+    document.getElementById("upc-sku").value = '';
 }
 function clrcub() {
-    document.getElementById("cubby").value = ''
+    document.getElementById("cubby").value = '';
 }
 function go2cub() {
-    document.getElementById("cubby").focus()
+    document.getElementById("cubby").focus();
 }
 
 function stopShake(spot, qt, tot) {
     document.getElementById(padSpot(spot)).classList.remove("tada");
     document.getElementById('clickwall').setAttribute('hidden', '');
-    orderCount(spot, qt, tot)
-    go2you()
-}
-
-function cubbyAssign(e) {
-    // if (e.keyCode == 13) {
-    //     var skupc = document.getElementById("upc-sku");
-    //     var cubby = document.getElementById("cubby");
-    //     var pat = /[Dd][0-9]{3,}/;
-    //     if (!pat.test(cubby.value)) {
-    //         return;
-    //     }
-    //     if (order.location != cubby.value) {
-    //         alertMaterial(cubby);
-    //         return;
-    //     }
-    //     // Replace with fucntion to send to server
-    //     // also make true/false for errors to move on
-    //     var ok = fakeSend(cubby.value, User.email);
-    //     document.getElementById(order.location).classList.remove("tada");
-    //     orderCount(spot, sess, full);
-    //     console.log(cubby.value);
-    //     // Replace above
-    //     if (!ok) {
-    //         alert("An error has occrued on the server");
-    //         return;
-    //     }
-    //     skupc.value = '';
-    //     cubby.value = '';
-    //     skupc.focus();
-    //     return;
-    // }
+    orderCount(spot, qt, tot);
+    go2you();
 }
 
 function padSpot(spot) {
-    return 'D'+pad(Number(spot)+1,4)
+    return 'D'+pad(Number(spot)+1,4);
 }
 
 function orderCount(spot, qt, tot) {
-    var cl = document.getElementById(padSpot(spot)).classList
+    var cl = document.getElementById(padSpot(spot)).classList;
     if (cl.contains('tada')) {
-        return
+        return;
     }
 
     var loc = padSpot(spot);
@@ -245,12 +194,12 @@ function orderCount(spot, qt, tot) {
     }
     
     var cubProg = document.getElementById("prog-" + loc);
-    var wid = 100*qt / tot
+    var wid = 100*qt / tot;
     if (wid == 0) {
-        cubProg.style.visibility = 'hidden'
+        cubProg.style.visibility = 'hidden';
     } else {
         cubProg.style.width = wid+"%";
-        cubProg.style.visibility = 'visible'
+        cubProg.style.visibility = 'visible';
     }
 }
 
@@ -349,6 +298,11 @@ function materialAlert(title, msg) {
     dialog.showModal();
 }
 
+function endSessDialog(){
+    document.querySelector('#session-end').showModal();
+    document.getElementById('cancel-end').focus();
+}
+
 function login() {
     var provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
@@ -373,7 +327,7 @@ function login() {
     });
 }
 
-function closeDialog() {
+function closeWarn() {
     var title = document.getElementById("warning-title").innerHTML;
     var skupc = document.getElementById("upc-sku");
     var cubby = document.getElementById("cubby");
@@ -386,6 +340,9 @@ function closeDialog() {
 }
 function closeSess() {
     document.querySelector("#session-dialog").close();
+}
+function closeEnd() {
+    document.querySelector("#session-end").close();
 }
 
 
