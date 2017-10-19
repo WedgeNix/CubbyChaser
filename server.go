@@ -124,7 +124,7 @@ type iSession struct {
 
 func deliverSession(full shared.Session) {
 	fold := strconv.Itoa(full.ID)
-	shared.Must(os.Mkdir("www/assets/"+fold, os.ModePerm))
+	shared.Must(os.MkdirAll("www/assets/"+fold, os.ModePerm))
 	for _, ord := range full.Cubbies {
 		for _, itm := range ord.Items {
 			resp, err := http.Get(itm.ImageURL)
