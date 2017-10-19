@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/jpeg"
 	"io/ioutil"
@@ -195,6 +196,11 @@ func deliverSession(full shared.Session) {
 			}
 			return
 		case uid = <-UID:
+			var ids []int
+			for userID := range db {
+				ids = append(ids, userID)
+			}
+			fmt.Println(ids)
 		}
 
 		_, found := db[uid]

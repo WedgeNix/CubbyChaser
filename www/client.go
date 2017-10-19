@@ -91,6 +91,7 @@ func joinSession(id int) {
 	for gen := true; gen; gen = <-Found {
 		uid = rand.Int()
 		UID <- uid
+		println(`uid`, uid)
 	}
 	done <- true
 
