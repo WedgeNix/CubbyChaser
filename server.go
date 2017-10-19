@@ -57,9 +57,9 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 
 	go func() {
 		Cap := len(ordNums)
-		// if Cap > 20 {
-		// 	Cap = 20
-		// }
+		if Cap > 20 {
+			Cap = 20
+		}
 		q := ordNums[:Cap]
 		println("id", id)
 		if id == 207 {
