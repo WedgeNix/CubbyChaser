@@ -116,6 +116,13 @@ func joinSession(id int) {
 	complete <- true
 }
 
+func clearCubz() {
+	getElementById("cubbies").Set("innerHTML", empty.Cubbies)
+	getElementById("sess-drop").Set("innerHTML", `<i class="material-icons">keyboard_arrow_down</i> Sessions `)
+	getElementById("show-sess").Call("removeAttribute", "disabled")
+	getElementById("end-sess").Call("setAttribute", "disabled", "")
+}
+
 func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 	done := load.New(`manuallyPopulateCubbies`)
 
@@ -151,7 +158,10 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 	Bail := sock.Rbool(SOCKSessionUser)
 	Leave := sock.Wbool(SOCKSessionUser)
 
-	getElementById("exit-sess").Set("onclick", func() { println(`Leave`); Leave <- true })
+	getElementById("exit-sess").Set("onclick", func() {
+		Leave <- true
+		clearCubz()
+	})
 
 	upcc := make(chan string)
 	upcSKU := getElementById("upc-sku")
@@ -175,10 +185,7 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 			for range sess.Cubbies {
 				bail <- true
 			}
-			getElementById("cubbies").Set("innerHTML", empty.Cubbies)
-			getElementById("sess-drop").Set("innerHTML", `<i class="material-icons">keyboard_arrow_down</i> Sessions `)
-			getElementById("show-sess").Call("removeAttribute", "disabled")
-			getElementById("end-sess").Call("setAttribute", "disabled", "")
+			clearCubz()
 			return
 		case upc = <-upcc:
 		}
