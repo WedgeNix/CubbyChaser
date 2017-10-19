@@ -68,6 +68,28 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		done <- false
+
+		fold := strconv.Itoa(sess.ID)
+		shared.Must(os.MkdirAll("www/assets/"+fold, os.ModePerm))
+		for _, ord := range sess.Cubbies {
+			for _, itm := range ord.Items {
+				resp, err := http.Get(itm.ImageURL)
+				if err != nil {
+					continue
+				}
+				img, _, err := image.Decode(resp.Body)
+				resp.Body.Close()
+				if err != nil {
+					continue
+				}
+				f, err := os.Create("www/assets/" + fold + "/" + itm.UPC + ".jpg")
+				shared.Must(err)
+				jpeg.Encode(f, resize.Resize(120, 0, img, resize.Bilinear), nil)
+				f.Close()
+			}
+		}
+		done <- false
+
 		println("ItemCount", sess.ItemCount())
 
 		newSession <- sess
@@ -123,26 +145,6 @@ type iSession struct {
 }
 
 func deliverSession(full shared.Session) {
-	fold := strconv.Itoa(full.ID)
-	shared.Must(os.MkdirAll("www/assets/"+fold, os.ModePerm))
-	for _, ord := range full.Cubbies {
-		for _, itm := range ord.Items {
-			resp, err := http.Get(itm.ImageURL)
-			if err != nil {
-				continue
-			}
-			img, _, err := image.Decode(resp.Body)
-			resp.Body.Close()
-			if err != nil {
-				continue
-			}
-			f, err := os.Create("www/assets/" + fold + "/" + itm.UPC + ".jpg")
-			shared.Must(err)
-			jpeg.Encode(f, resize.Resize(120, 0, img, resize.Bilinear), nil)
-			f.Close()
-		}
-	}
-
 	SOCKSession := shared.SOCKSession(full.ID)
 	defer sock.Close(SOCKSession)
 
