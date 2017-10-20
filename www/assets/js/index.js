@@ -38,7 +38,6 @@ function populateSess(data) {
         allHTML += sessHTML;
     }
     document.getElementById("session-data").innerHTML = allHTML;
-    rippleCopy();
 } 
 
 function fixRip(id) {

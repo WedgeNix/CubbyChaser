@@ -7,6 +7,8 @@ import (
 	"sync"
 	"sync/atomic"
 
+	"github.com/mrmiguu/Loading"
+
 	"github.com/WedgeNix/CubbyChaser-shared"
 	"github.com/WedgeNix/CubbyChaser/www/empty"
 	"github.com/gopherjs/gopherjs/js"
@@ -39,7 +41,7 @@ func getElementById(id string) *js.Object {
 func main() {
 	var queue atomic.Value
 	var readChoice sync.Once
-	choice := make(chan int)
+	choice := make(chan int, 100)
 
 	Join := sock.Wbool()
 	Join <- true
@@ -65,7 +67,9 @@ func main() {
 						alert("Wrong Session", "Session chosen has expired")
 						continue
 					}
+					done := load.New(`choice <- id`)
 					choice <- id
+					done <- true
 				}
 			})
 		}
@@ -73,33 +77,73 @@ func main() {
 }
 
 func joinSession(id int) {
+	done := load.New(`joinSession`)
+	defer println(`[joinSession DONE]`)
+
 	SOCKSession := shared.SOCKSession(id)
 	defer sock.Close(SOCKSession)
 
 	Kill := sock.Wbool(SOCKSession)
+	done <- false
 	UID := sock.Wint(SOCKSession)
+	done <- false
 	Found := sock.Rbool(SOCKSession)
+	done <- false
 
 	var uid int
 	for gen := true; gen; gen = <-Found {
 		uid = rand.Int()
 		UID <- uid
+		println(`uid`, uid)
 	}
+	done <- true
+
+	SOCKUID := strconv.Itoa(uid)
+	Ping, Pong := sock.Wbool(SOCKUID), sock.Rbool(SOCKUID)
+	defer sock.Close(SOCKUID)
+	complete := make(chan bool)
+
+	go func() {
+		for {
+			Ping <- true
+			select {
+			case <-complete:
+				println("[completed pinging this session]")
+				return
+			case <-Pong:
+			}
+		}
+	}()
 
 	manuallyPopulateCubbies(id, uid, Kill)
+	complete <- true
+}
+
+func clearCubz() {
+	getElementById("cubbies").Set("innerHTML", empty.Cubbies)
+	getElementById("sess-drop").Set("innerHTML", `<i class="material-icons">keyboard_arrow_down</i> Sessions `)
+	getElementById("show-sess").Call("removeAttribute", "disabled")
+	getElementById("end-sess").Call("setAttribute", "disabled", "")
 }
 
 func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
+	done := load.New(`manuallyPopulateCubbies`)
+	defer println(`[manuallyPopulateCubbies DONE]`)
+
 	SOCKSessionUser := shared.SOCKSessionUser(id, uid)
 	defer sock.Close(SOCKSessionUser)
 
 	Sess := sock.Rbytes(SOCKSessionUser)
 	full := shared.Bytes2session(<-Sess)
+	done <- false
 	sess := shared.Bytes2session(<-Sess)
+	done <- false
 	println(sess.String())
+	done <- true
 
 	qtc = make([]atomic.Value, len(full.Cubbies))
 	js.Global.Call("populateCubbies", full)
+	js.Global.Call("rippleCopy")
 	js.Global.Call("preloadImages", full.Cubbies)
 	for spot, orig := range full.Cubbies {
 		updateOrder(spot, sess.Cubbies[spot], orig)
@@ -110,7 +154,10 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 		go syncOrder(id, spot, full.Cubbies[spot], bail)
 	}
 
-	getElementById("delete-sess").Set("onclick", func() { Kill <- true })
+	getElementById("delete-sess").Set("onclick", func() {
+		Kill <- true
+		js.Global.Call("closeEnd")
+	})
 
 	UPC := sock.Wstring(SOCKSessionUser)
 	Spot := sock.Rint(SOCKSessionUser)
@@ -119,7 +166,12 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 	Bail := sock.Rbool(SOCKSessionUser)
 	Leave := sock.Wbool(SOCKSessionUser)
 
-	getElementById("exit-sess").Set("onclick", func() { Leave <- true })
+	leave := make(chan bool, 1)
+	getElementById("exit-sess").Set("onclick", func() {
+		Leave <- true
+		leave <- true
+		js.Global.Call("closeEnd")
+	})
 
 	upcc := make(chan string)
 	upcSKU := getElementById("upc-sku")
@@ -139,14 +191,17 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 	for {
 		var upc string
 		select {
+		case <-leave:
+			for range sess.Cubbies {
+				bail <- true
+			}
+			clearCubz()
+			return
 		case <-Bail:
 			for range sess.Cubbies {
 				bail <- true
 			}
-			getElementById("cubbies").Set("innerHTML", empty.Cubbies)
-			getElementById("sess-drop").Set("innerHTML", `<i class="material-icons">keyboard_arrow_down</i> Sessions `)
-			getElementById("show-sess").Call("removeAttribute", "disabled")
-			getElementById("end-sess").Call("setAttribute", "disabled", "")
+			clearCubz()
 			return
 		case upc = <-upcc:
 		}

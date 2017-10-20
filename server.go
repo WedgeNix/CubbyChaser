@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/jpeg"
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"sync"
 	"time"
 
@@ -180,6 +182,7 @@ func deliverSession(full shared.Session) {
 		Ords = append(Ords, sock.Wbytes(SOCKSessionCubby))
 	}
 
+	var dl sync.RWMutex
 	db := map[int]bool{}
 
 	kill, Kill := make(chan bool), sock.Rbool(SOCKSession)
@@ -190,11 +193,19 @@ func deliverSession(full shared.Session) {
 		var uid int
 		select {
 		case <-Kill:
+			dl.RLock()
 			for i := 0; i < len(db); i++ {
 				kill <- true
 			}
+			dl.RUnlock()
 			return
 		case uid = <-UID:
+			var ids []int
+			dl.Lock()
+			for userID := range db {
+				ids = append(ids, userID)
+			}
+			fmt.Println(ids)
 		}
 
 		_, found := db[uid]
@@ -203,31 +214,71 @@ func deliverSession(full shared.Session) {
 			continue
 		}
 
-		go assistUser(full, uid, &sess, Ords, kill)
+		SOCKUID := strconv.Itoa(uid)
+		Ping, Pong := sock.Wbool(SOCKUID), sock.Rbool(SOCKUID)
+		go func() {
+			defer sock.Close(SOCKUID)
+			for {
+				timesup := time.NewTimer(5 * time.Second)
+				select {
+				case <-timesup.C:
+					timesup.Stop()
+					closeUser(uid, db, &dl)
+					return
+				case <-Pong:
+					time.Sleep(2 * time.Second)
+					Ping <- true
+				}
+				timesup.Stop()
+			}
+		}()
+
+		go assistUser(full, uid, &sess, Ords, kill, db, &dl)
 
 		db[uid] = true
+		dl.Unlock()
 	}
 }
 
-func assistUser(full shared.Session, uid int, sess *iSession, Ords []chan<- []byte, kill <-chan bool) {
-	println(`[[Assisting a new user]]`)
+func closeUser(uid int, db map[int]bool, dl *sync.RWMutex) {
+	done := load.New(`removing user #` + strconv.Itoa(uid))
+	dl.Lock()
+	done <- false
+	delete(db, uid)
+	dl.Unlock()
+	done <- true
+}
+
+func assistUser(full shared.Session, uid int, sess *iSession, Ords []chan<- []byte, kill <-chan bool, db map[int]bool, dl *sync.RWMutex) {
+	done := load.New(`adding user #` + strconv.Itoa(uid))
+	defer closeUser(uid, db, dl)
 
 	SOCKSessionUser := shared.SOCKSessionUser(full.ID, uid)
 	defer sock.Close(SOCKSessionUser)
 
 	Sess := sock.Wbytes(SOCKSessionUser)
+	done <- false
 	Sess <- shared.Session2bytes(full)
+	done <- false
 	sess.Lock()
 	s := sess.shared
+	done <- false
 	sess.Unlock()
 	Sess <- shared.Session2bytes(s)
+	done <- false
 
 	UPC := sock.Rstring(SOCKSessionUser)
+	done <- false
 	Spot := sock.Wint(SOCKSessionUser)
+	done <- false
 	Put := sock.Rbool(SOCKSessionUser)
+	done <- false
 	Cancel := sock.Wbool(SOCKSessionUser)
+	done <- false
 	Bail := sock.Wbool(SOCKSessionUser)
+	done <- false
 	Leave := sock.Rbool(SOCKSessionUser)
+	done <- true
 
 nextUPC:
 	for {
