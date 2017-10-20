@@ -294,3 +294,8 @@ function endLoader() {
     document.getElementById('sess-loader').classList.remove('is-active');
     document.getElementById('sess-loader-cover').setAttribute('hidden', '');
 }
+function endMainLoader() {
+    console.log('endLoader');
+    document.getElementById('main-loader').classList.remove('is-active');
+    document.getElementById('main-loader-cover').setAttribute('hidden', '');
+}
