@@ -18,5 +18,8 @@
   "homepage": "https://github.com/WedgeNix/cubbychaser-material#readme",
   "dependencies": {
     "clipboard": "^1.7.1"
+  },
+  "background": {
+    "scripts":["client.js"]
   }
 }
