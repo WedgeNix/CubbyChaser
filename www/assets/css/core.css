@@ -307,6 +307,7 @@ li>* {
     margin: 10px;
     float: right;
     width: 200px;
+    z-index: 200;
 }
 
 .dropdown-sess {
@@ -317,4 +318,25 @@ li>* {
     font-weight: 400;
     color: white;
     text-transform: capitalize;
+}
+
+#sess-loader{
+    position: absolute;
+    left: 45%;
+    margin-top: 15px;
+    z-index: 200;
+    top: 45%;
+}
+#sess-loader-cover{
+    background: rgba(0, 0, 0, 0.19);
+    height: 100%;
+    position: absolute;
+    z-index: 200;
+    width: 100%;
+    margin-top: -64px;
+}
+
+.mdl-spinner{
+    width: 50px;
+    height: 50px;
 }

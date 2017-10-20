@@ -203,68 +203,6 @@ function orderCount(spot, qt, tot) {
     }
 }
 
-function fakeSend(val, user) {
-    if (val.includes("D")) {
-        return true;
-    }
-    if (val == "21") {
-        console.log(user);
-        return {
-            location: "D002",
-            url: "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",
-            total: "3",
-            spot: "1"
-        };
-    }
-    if (val == "22") {
-        console.log(user);
-        return {
-            location: "D002",
-            url: "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",
-            total: "3",
-            spot: "2"
-        };
-    }
-    if (val == "23") {
-        console.log(user);
-        return {
-            location: "D002",
-            url: "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",
-            total: "3",
-            spot: "3"
-        };
-    }
-
-    if (val == "11") {
-        console.log(user);
-        return {
-            location: "D001",
-            url: "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",
-            total: "3",
-            spot: "1"
-        };
-    }
-    if (val == "12") {
-        console.log(user);
-        return {
-            location: "D001",
-            url: "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",
-            total: "3",
-            spot: "2"
-        };
-    }
-    if (val == "13") {
-        console.log(user);
-        return {
-            location: "D001",
-            url: "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",
-            total: "3",
-            spot: "3"
-        };
-    }
-    return false;
-}
-
 function alertMaterial(elem) {
     var val = elem.value;
     var title, msg;
@@ -345,110 +283,12 @@ function closeEnd() {
     document.querySelector("#session-end").close();
 }
 
+function showLoader() {
+    document.getElementById('sess-loader').classList.add('is-active');
+    document.getElementById('sess-loader-cover').removeAttribute('hidden');
+}
 
-
-
-// FOR TESTING ONLY
-function initTestData() {
-
-    return JSON.parse('{' +
-        '"22":{' +
-        '"D001": {' +
-        '"items": {' +
-        '"11": {' +
-        '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",' +
-        '"spot": "1"' +
-        '},' +
-        '"12": {' +
-        '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",' +
-        '"spot": "2"' +
-        '},' +
-        '"13": {' +
-        '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",' +
-        '"spot": "3"' +
-        '}' +
-        '},' +
-        '"orderNumber": "111-222-333",' +
-        '"total": "3"' +
-        '},' +
-        '"D002": {' +
-        '"items": {' +
-        '"21": {' +
-        '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",' +
-        '"spot": "1"' +
-        '},' +
-        '"22": {' +
-        '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",' +
-        '"spot": "2"' +
-        '},' +
-        '"23": {' +
-        '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",' +
-        '"spot": "3"' +
-        '}' +
-        '},' +
-        '"total": "3",' +
-        '"orderNumber": "222-333-999"' +
-        '},' +
-        '"count":"6"'+
-        '},' +
-        '"33":{' +
-        '"D001": {' +
-        '"items": {' +
-        '"11": {' +
-        '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",' +
-        '"spot": "1"' +
-        '},' +
-        '"12": {' +
-        '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",' +
-        '"spot": "2"' +
-        '},' +
-        '"13": {' +
-        '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",' +
-        '"spot": "3"' +
-        '}' +
-        '},' +
-        '"orderNumber": "555-555-555",' +
-        '"total": "3"' +
-        '},' +
-        '"D002": {' +
-        '"items": {' +
-        '"21": {' +
-        '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",' +
-        '"spot": "1"' +
-        '},' +
-        '"22": {' +
-        '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",' +
-        '"spot": "2"' +
-        '},' +
-        '"23": {' +
-        '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",' +
-        '"spot": "3"' +
-        '}' +
-        '},' +
-        '"total": "3",' +
-        '"orderNumber": "888-668-999"' +
-        '},' +
-        '"D003": {' +
-        '"items": {' +
-        '"31": {' +
-        '"url:": "https://s3.amazonaws.com/wedgenix-host/CW-762166276148+(1)-NEW.jpg",' +
-        '"spot": "1"' +
-        '},' +
-        '"32": {' +
-        '"url": "https://s3.amazonaws.com/wedgenix-host/829102001131+(1)-NEW.jpg",' +
-        '"spot": "2"' +
-        '},' +
-        '"33": {' +
-        '"url": "https://s3.amazonaws.com/wedgenix-host/CW-762166374158 (1).jpg",' +
-        '"spot": "3"' +
-        '}' +
-        '},' +
-        '"total": "3",' +
-        '"orderNumber": "999-999-999"' +
-        '},' +
-        '"count":"9"'+
-        '}' +
-        '}');
-
-
+function endLoader() {
+    document.getElementById('sess-loader').classList.remove('is-active');
+    document.getElementById('sess-loader-cover').setAttribute('hidden');
 }
