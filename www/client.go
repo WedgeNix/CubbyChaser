@@ -67,6 +67,7 @@ func main() {
 						alert("Wrong Session", "Session chosen has expired")
 						continue
 					}
+					js.Global.Call("showLoader")
 					done := load.New(`choice <- id`)
 					choice <- id
 					done <- true

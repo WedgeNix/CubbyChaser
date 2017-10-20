@@ -98,8 +98,8 @@ function populateCubbies(full) {
     document.getElementById("sess-drop").innerHTML = '<i class="material-icons">keyboard_arrow_down</i> Session '+full.ID;
     document.getElementById("end-sess").removeAttribute("disabled");
     document.getElementById("show-sess").setAttribute("disabled", '');
-    closeSess();
     fixRip(full.ID);
+    closeSess();
     go2you();
 }
 
@@ -277,6 +277,7 @@ function closeWarn() {
 }
 function closeSess() {
     document.querySelector("#session-dialog").close();
+    endLoader();
 }
 function closeEnd() {
     document.querySelector("#session-end").close();
