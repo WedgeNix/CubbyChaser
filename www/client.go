@@ -31,9 +31,11 @@ func populateQueue(q shared.Queue) {
 	js.Global.Call("populateSess", q)
 	for id := range q {
 		getElementById("sessBar-"+strconv.Itoa(id)).Set("onclick", func() {
-			done := load.New("idc <- id")
-			idc <- id
-			done <- true
+			go func() {
+				done := load.New("idc <- id")
+				idc <- id
+				done <- true
+			}()
 		})
 	}
 }
