@@ -41,7 +41,7 @@ func getElementById(id string) *js.Object {
 func main() {
 	var queue atomic.Value
 	var readChoice sync.Once
-	choice := make(chan int)
+	choice := make(chan int, 100)
 
 	Join := sock.Wbool()
 	Join <- true
@@ -78,6 +78,7 @@ func main() {
 
 func joinSession(id int) {
 	done := load.New(`joinSession`)
+	defer println(`[joinSession DONE]`)
 
 	SOCKSession := shared.SOCKSession(id)
 	defer sock.Close(SOCKSession)
@@ -127,6 +128,7 @@ func clearCubz() {
 
 func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 	done := load.New(`manuallyPopulateCubbies`)
+	defer println(`[manuallyPopulateCubbies DONE]`)
 
 	SOCKSessionUser := shared.SOCKSessionUser(id, uid)
 	defer sock.Close(SOCKSessionUser)
@@ -160,9 +162,10 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 	Bail := sock.Rbool(SOCKSessionUser)
 	Leave := sock.Wbool(SOCKSessionUser)
 
+	leave := make(chan bool, 1)
 	getElementById("exit-sess").Set("onclick", func() {
 		Leave <- true
-		clearCubz()
+		leave <- true
 	})
 
 	upcc := make(chan string)
@@ -183,6 +186,12 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 	for {
 		var upc string
 		select {
+		case <-leave:
+			for range sess.Cubbies {
+				bail <- true
+			}
+			clearCubz()
+			return
 		case <-Bail:
 			for range sess.Cubbies {
 				bail <- true
