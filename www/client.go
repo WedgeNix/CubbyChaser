@@ -30,7 +30,11 @@ func init() {
 func populateQueue(q shared.Queue) {
 	js.Global.Call("populateSess", q)
 	for id := range q {
-		getElementById("sessBar-"+strconv.Itoa(id)).Set("onclick", func() { println("sessBar-" + strconv.Itoa(id) + ":idc<-id"); idc <- id })
+		getElementById("sessBar-"+strconv.Itoa(id)).Set("onclick", func() {
+			done := load.New("idc <- id")
+			idc <- id
+			done <- true
+		})
 	}
 }
 
@@ -60,15 +64,15 @@ func main() {
 
 			go readChoice.Do(func() {
 				for {
-					println("sessBar-?:id=<-idc")
+					done := load.New("id := <-idc")
 					id := <-idc
-					println("sessBar-" + strconv.Itoa(id) + ":id=<-idc")
+					done <- true
 					if _, found := queue.Load().(shared.Queue)[id]; !found {
 						alert("Wrong Session", "Session chosen has expired")
 						continue
 					}
 					js.Global.Call("showLoader")
-					done := load.New(`choice <- id`)
+					done = load.New(`choice <- id`)
 					choice <- id
 					done <- true
 				}
