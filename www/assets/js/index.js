@@ -292,5 +292,5 @@ function showLoader() {
 function endLoader() {
     console.log('endLoader');
     document.getElementById('sess-loader').classList.remove('is-active');
-    document.getElementById('sess-loader-cover').setAttribute('hidden');
+    document.getElementById('sess-loader-cover').setAttribute('hidden', '');
 }
