@@ -276,19 +276,21 @@ function closeWarn() {
     }
 }
 function closeSess() {
-    document.querySelector("#session-dialog").close();
     endLoader();
+    document.querySelector("#session-dialog").close();
 }
 function closeEnd() {
     document.querySelector("#session-end").close();
 }
 
 function showLoader() {
+    console.log('showLoader');
     document.getElementById('sess-loader').classList.add('is-active');
     document.getElementById('sess-loader-cover').removeAttribute('hidden');
 }
 
 function endLoader() {
+    console.log('endLoader');
     document.getElementById('sess-loader').classList.remove('is-active');
     document.getElementById('sess-loader-cover').setAttribute('hidden');
 }
