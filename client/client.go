@@ -24,7 +24,7 @@ var (
 
 func init() {
 	document = js.Global.Get("document")
-	getElementById("main-loader").Call("setAttribute", "hidden", "")
+	js.Global.Call("endMainLoader")
 	sock.Addr = js.Global.Get("location").Get("host").String()
 }
 
