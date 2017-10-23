@@ -145,7 +145,7 @@ function sendToCubby(img, spot) {
     var cub = document.getElementById(loc);
     var cubImg = document.getElementById("img-" + loc);
     var cubBan = document.getElementById("band-" + loc);
-    cubImg.innerHTML = '<img src="' + img + '" alt="" >';
+    cubImg.innerHTML = '<span class="order-count">' + (spot+1) + '</span>'; //'<img src="' + img + '" alt="" >';
 
     cub.classList.add("tada");
     // cub.addEventListener('click', function(e) { e.stopPropagation() })

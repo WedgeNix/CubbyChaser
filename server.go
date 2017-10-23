@@ -3,16 +3,13 @@ package main
 import (
 	"compress/gzip"
 	"fmt"
-	"image"
-	"image/jpeg"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
-
-	"github.com/nfnt/resize"
 
 	"github.com/mrmiguu/sock"
 
@@ -113,29 +110,29 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 		}
 		done <- false
 
-		shared.Must(os.MkdirAll("www/"+shared.PictureFolder, os.ModePerm))
-		for _, ord := range sess.Cubbies {
-			for _, itm := range ord.Items {
-				file := "www/" + shared.PictureFolder + "/" + itm.UPC + ".jpg"
-				if _, err := os.Stat(file); !os.IsNotExist(err) {
-					continue
-				}
-				resp, err := http.Get(itm.ImageURL)
-				if err != nil {
-					continue
-				}
-				img, _, err := image.Decode(resp.Body)
-				resp.Body.Close()
-				if err != nil {
-					continue
-				}
-				f, err := os.Create(file)
-				shared.Must(err)
-				jpeg.Encode(f, resize.Resize(120, 0, img, resize.Bilinear), nil)
-				f.Close()
-			}
-		}
-		done <- false
+		// shared.Must(os.MkdirAll("www/"+shared.PictureFolder, os.ModePerm))
+		// for _, ord := range sess.Cubbies {
+		// 	for _, itm := range ord.Items {
+		// 		file := "www/" + shared.PictureFolder + "/" + itm.UPC + ".jpg"
+		// 		if _, err := os.Stat(file); !os.IsNotExist(err) {
+		// 			continue
+		// 		}
+		// 		resp, err := http.Get(itm.ImageURL)
+		// 		if err != nil {
+		// 			continue
+		// 		}
+		// 		img, _, err := image.Decode(resp.Body)
+		// 		resp.Body.Close()
+		// 		if err != nil {
+		// 			continue
+		// 		}
+		// 		f, err := os.Create(file)
+		// 		shared.Must(err)
+		// 		jpeg.Encode(f, resize.Resize(120, 0, img, resize.Bilinear), nil)
+		// 		f.Close()
+		// 	}
+		// }
+		// done <- false
 
 		println("ItemCount", sess.ItemCount())
 
@@ -163,12 +160,15 @@ func main() {
 			go func(sess shared.Session) {
 				deliverSession(sess)
 
+				done := load.New("deleting session #" + strconv.Itoa(sess.ID))
 				queuel.Lock()
 				delete(queue, sess.ID)
 				b := shared.Queue2bytes(queue)
 				queuel.Unlock()
+				done <- false
 
 				Queue <- b
+				done <- true
 			}(sess)
 		}
 	}()
@@ -330,6 +330,7 @@ nextUPC:
 			return
 		case upc = <-UPC:
 		}
+		upc = strings.ToUpper(upc)
 
 		if len(upc) == 0 {
 			Spot <- -1
@@ -338,7 +339,7 @@ nextUPC:
 		sess.Lock()
 		for spot, ord := range full.Cubbies {
 			for _, orig := range ord.Items {
-				if orig.UPC != upc && orig.SKU != upc {
+				if orig.UPC != upc && strings.ToUpper(orig.SKU) != upc {
 					continue
 				}
 				cubs := sess.shared.Cubbies
