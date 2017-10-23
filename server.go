@@ -1,6 +1,7 @@
 package main
 
 import (
+	"compress/gzip"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -33,13 +34,34 @@ func init() {
 		port = "5000"
 	}
 	http.HandleFunc("/createSession", createSession)
-	http.HandleFunc("/client", getClient)
+
+	http.Handle("client/client.js.map", http.FileServer(http.Dir("client/client.js.map")))
+	gzipClient()
+	http.HandleFunc("/client.js.gz", getClient)
+
 	sock.Addr = ":" + port
 }
 
-func getClient(w http.ResponseWriter, r *http.Request) {
+func gzipClient() {
+	f, err := os.Create("client.js.gz")
+	if err != nil {
+		panic(err)
+	}
+	zw := gzip.NewWriter(f)
+	defer zw.Close()
 
-	data, err := ioutil.ReadFile("clientjs/client.js.gz")
+	b, err := ioutil.ReadFile("client/client.js")
+	if err != nil {
+		panic(err)
+	}
+	_, err = zw.Write(b)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func getClient(w http.ResponseWriter, r *http.Request) {
+	data, err := ioutil.ReadFile("client.js.gz")
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
