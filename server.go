@@ -298,6 +298,7 @@ func assistUser(full shared.Session, uid int, sess *iSession, Ords []chan<- []by
 
 	SOCKSessionUser := shared.SOCKSessionUser(full.ID, uid)
 	defer sock.Close(SOCKSessionUser)
+	println(SOCKSessionUser)
 
 	Sess := sock.Wbytes(SOCKSessionUser)
 	done <- false

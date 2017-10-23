@@ -140,6 +140,7 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 
 	SOCKSessionUser := shared.SOCKSessionUser(id, uid)
 	defer sock.Close(SOCKSessionUser)
+	println(SOCKSessionUser)
 
 	Sess := sock.Rbytes(SOCKSessionUser)
 	full := shared.Bytes2session(<-Sess)
