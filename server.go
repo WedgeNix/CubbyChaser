@@ -177,11 +177,14 @@ func main() {
 	for range Join {
 		println(`[[A new user joined]]`)
 		go func() {
+			done := load.New("sending queue to new user")
 			queuel.RLock()
 			b := shared.Queue2bytes(queue)
 			queuel.RUnlock()
+			done <- false
 
 			Queue <- b
+			done <- true
 		}()
 	}
 }
