@@ -226,7 +226,7 @@ func deliverSession(full shared.Session) {
 	}
 
 	var dl sync.RWMutex
-	db := map[int]bool{}
+	db := map[int]chan bool{}
 
 	kill, Kill := make(chan bool), sock.Rbool(SOCKSession)
 	UID := sock.Rint(SOCKSession)
@@ -270,7 +270,9 @@ func deliverSession(full shared.Session) {
 				select {
 				case <-timesup.C:
 					timesup.Stop()
-					closeUser(uid, db, &dl)
+					dl.RLock()
+					db[uid] <- true
+					dl.RUnlock()
 					return
 				case <-Pong:
 					time.Sleep(2 * time.Second)
@@ -282,12 +284,12 @@ func deliverSession(full shared.Session) {
 
 		go assistUser(full, uid, &sess, Ords, kill, db, &dl)
 
-		db[uid] = true
+		db[uid] = make(chan bool)
 		dl.Unlock()
 	}
 }
 
-func closeUser(uid int, db map[int]bool, dl *sync.RWMutex) {
+func closeUser(uid int, db map[int]chan bool, dl *sync.RWMutex) {
 	done := load.New(`removing user #` + strconv.Itoa(uid))
 	dl.Lock()
 	done <- false
@@ -296,7 +298,7 @@ func closeUser(uid int, db map[int]bool, dl *sync.RWMutex) {
 	done <- true
 }
 
-func assistUser(full shared.Session, uid int, sess *iSession, Ords []chan<- []byte, kill <-chan bool, db map[int]bool, dl *sync.RWMutex) {
+func assistUser(full shared.Session, uid int, sess *iSession, Ords []chan<- []byte, kill <-chan bool, db map[int]chan bool, dl *sync.RWMutex) {
 	SOCKSessionUser := shared.SOCKSessionUser(full.ID, uid)
 	defer sock.Close(SOCKSessionUser)
 	println(SOCKSessionUser)
@@ -332,6 +334,11 @@ nextUPC:
 	for {
 		var upc string
 		select {
+		case <-db[uid]:
+			done := load.New("bailing #" + strconv.Itoa(uid))
+			time.Sleep(2 * time.Second)
+			done <- true
+			return
 		case <-kill:
 			done := load.New("bailing #" + strconv.Itoa(uid))
 			Bail <- true
