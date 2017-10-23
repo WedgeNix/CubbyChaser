@@ -236,11 +236,15 @@ func deliverSession(full shared.Session) {
 		var uid int
 		select {
 		case <-Kill:
+			done := load.New("killing")
 			dl.RLock()
+			done <- false
 			for i := 0; i < len(db); i++ {
 				kill <- true
+				done <- false
 			}
 			dl.RUnlock()
+			done <- true
 			return
 		case uid = <-UID:
 			var ids []int
@@ -293,12 +297,12 @@ func closeUser(uid int, db map[int]bool, dl *sync.RWMutex) {
 }
 
 func assistUser(full shared.Session, uid int, sess *iSession, Ords []chan<- []byte, kill <-chan bool, db map[int]bool, dl *sync.RWMutex) {
-	done := load.New(`adding user #` + strconv.Itoa(uid))
-	defer closeUser(uid, db, dl)
-
 	SOCKSessionUser := shared.SOCKSessionUser(full.ID, uid)
 	defer sock.Close(SOCKSessionUser)
 	println(SOCKSessionUser)
+
+	done := load.New(`adding user #` + strconv.Itoa(uid))
+	defer closeUser(uid, db, dl)
 
 	Sess := sock.Wbytes(SOCKSessionUser)
 	done <- false
@@ -329,7 +333,11 @@ nextUPC:
 		var upc string
 		select {
 		case <-kill:
+			done := load.New("bailing #" + strconv.Itoa(uid))
 			Bail <- true
+			done <- false
+			time.Sleep(2 * time.Second)
+			done <- true
 			return
 		case <-Leave:
 			return

@@ -140,12 +140,12 @@ func clearCubz() {
 }
 
 func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
-	done := load.New(`manuallyPopulateCubbies`)
-	defer println(`[manuallyPopulateCubbies DONE]`)
-
 	SOCKSessionUser := shared.SOCKSessionUser(id, uid)
 	defer sock.Close(SOCKSessionUser)
 	println(SOCKSessionUser)
+
+	done := load.New(`manuallyPopulateCubbies`)
+	defer println(`[manuallyPopulateCubbies DONE]`)
 
 	Sess := sock.Rbytes(SOCKSessionUser)
 	full := shared.Bytes2session(<-Sess)
@@ -168,17 +168,20 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 		go syncOrder(id, spot, full.Cubbies[spot], bail)
 	}
 
-	getElementById("delete-sess").Set("onclick", func() {
-		Kill <- true
-		js.Global.Call("closeEnd")
-	})
-
 	UPC := sock.Wstring(SOCKSessionUser)
 	Spot := sock.Rint(SOCKSessionUser)
 	Put := sock.Wbool(SOCKSessionUser)
 	Cancel := sock.Rbool(SOCKSessionUser)
 	Bail := sock.Rbool(SOCKSessionUser)
 	Leave := sock.Wbool(SOCKSessionUser)
+
+	getElementById("delete-sess").Set("onclick", func() {
+		done := load.New("Kill <- true")
+		Kill <- true
+		done <- false
+		js.Global.Call("closeEnd")
+		done <- true
+	})
 
 	leave := make(chan bool, 1)
 	getElementById("exit-sess").Set("onclick", func() {
@@ -212,10 +215,13 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 			clearCubz()
 			return
 		case <-Bail:
+			done := load.New("bailing")
 			for range sess.Cubbies {
 				bail <- true
 			}
+			done <- false
 			clearCubz()
+			done <- true
 			return
 		case upc = <-upcc:
 		}
