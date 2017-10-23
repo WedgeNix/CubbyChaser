@@ -1,11 +1,13 @@
 package main
 
 import (
-	"math/rand"
+	"crypto/md5"
+	"encoding/binary"
 	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/mrmiguu/Loading"
 
@@ -100,7 +102,8 @@ func joinSession(id int) {
 
 	var uid int
 	for gen := true; gen; gen = <-Found {
-		uid = rand.Int()
+		md := md5.Sum([]byte(time.Now().String()))
+		uid = int(binary.BigEndian.Uint64(md[:]))
 		UID <- uid
 		println(`uid`, uid)
 	}
