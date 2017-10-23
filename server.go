@@ -161,6 +161,7 @@ func main() {
 				deliverSession(sess)
 
 				done := load.New("deleting session #" + strconv.Itoa(sess.ID))
+
 				queuel.Lock()
 				delete(queue, sess.ID)
 				b := shared.Queue2bytes(queue)
