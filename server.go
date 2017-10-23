@@ -33,7 +33,21 @@ func init() {
 		port = "5000"
 	}
 	http.HandleFunc("/createSession", createSession)
+	http.HandleFunc("/client", getClient)
 	sock.Addr = ":" + port
+}
+
+func getClient(w http.ResponseWriter, r *http.Request) {
+
+	data, err := ioutil.ReadFile("clientjs/client.js.gz")
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	w.Header().Add("Content-Type", "application/javascript")
+	w.Header().Add("Content-Encoding", "gzip")
+	w.Write(data)
 }
 
 func createSession(w http.ResponseWriter, r *http.Request) {
