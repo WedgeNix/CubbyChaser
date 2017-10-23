@@ -104,7 +104,9 @@ func joinSession(id int) {
 	for gen := true; gen; gen = <-Found {
 		md := md5.Sum([]byte(time.Now().String()))
 		uid = int(binary.BigEndian.Uint64(md[:]))
+
 		UID <- uid
+
 		println(`uid`, uid)
 	}
 	done <- true
