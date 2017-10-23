@@ -35,7 +35,7 @@ func init() {
 	}
 	http.HandleFunc("/createSession", createSession)
 
-	http.Handle("client/client.js.map", http.FileServer(http.Dir("client/client.js.map")))
+	http.Handle("/client/client.js.map", http.FileServer(http.Dir("client/client.js.map")))
 	gzipClient()
 	http.HandleFunc("/client.js.gz", getClient)
 
