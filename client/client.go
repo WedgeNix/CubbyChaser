@@ -158,7 +158,7 @@ func manuallyPopulateCubbies(id, uid int, Kill chan<- bool) {
 	qtc = make([]atomic.Value, len(full.Cubbies))
 	js.Global.Call("populateCubbies", full)
 	js.Global.Call("rippleCopy")
-	js.Global.Call("preloadImages", full.Cubbies)
+	// js.Global.Call("preloadImages", full.Cubbies)
 	for spot, orig := range full.Cubbies {
 		updateOrder(spot, sess.Cubbies[spot], orig)
 	}
