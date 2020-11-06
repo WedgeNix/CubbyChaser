@@ -82,7 +82,7 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 	done <- false
-
+	fmt.println(b)
 	id, ordNums, err := session.ParseIDAndOrderNumbers(string(b))
 	if err != nil {
 		http.Error(w, "unable to parse html", http.StatusUnprocessableEntity)
