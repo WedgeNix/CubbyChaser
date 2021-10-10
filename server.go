@@ -2,6 +2,7 @@ package main
 
 import (
 	"compress/gzip"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -20,6 +21,11 @@ import (
 
 	"github.com/mrmiguu/Loading"
 )
+
+type extJSON struct {
+	ID   string
+	Ords []string
+}
 
 var (
 	newSession = make(chan shared.Session)
@@ -74,20 +80,21 @@ func getClient(w http.ResponseWriter, r *http.Request) {
 
 func createSession(w http.ResponseWriter, r *http.Request) {
 	done := load.New("creating session")
-
-	b, err := ioutil.ReadAll(r.Body)
+	jRresp := extJSON{}
+	err := json.NewDecoder(r.Body).Decode(&jRresp)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 	defer r.Body.Close()
 	done <- false
-	fmt.println(b)
-	id, ordNums, err := session.ParseIDAndOrderNumbers(string(b))
+
+	id, err := strconv.Atoi(jRresp.ID)
 	if err != nil {
-		http.Error(w, "unable to parse html", http.StatusUnprocessableEntity)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
+	ordNums := jRresp.Ords
 	done <- false
 
 	http.Error(w, http.StatusText(http.StatusOK), http.StatusOK)
