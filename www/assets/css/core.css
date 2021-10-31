@@ -54,17 +54,18 @@ body {
     text-align: center;
 }
 
-.mdl-dialog__content>button{
+.mdl-dialog__content>button {
     margin-top: 15px;
 }
 
-#session-end{
-    width:30%;
+#session-end {
+    width: 30%;
 }
 
-.right-side{
+.right-side {
     float: right;
 }
+
 .session-end {
     background: var(--main-color);
     padding: 0px;
@@ -320,28 +321,31 @@ li>* {
     text-transform: capitalize;
 }
 
-#sess-loader{
+#sess-loader {
     position: absolute;
     left: 45%;
     margin-top: 15px;
     z-index: 200;
     top: 45%;
 }
-#main-loader{
+
+#main-loader {
     position: absolute;
     left: 45%;
     margin-top: 15px;
     z-index: 200;
     top: 45%;
 }
-#main-loader-cover{
+
+#main-loader-cover {
     background: rgba(0, 0, 0, 0.19);
     height: 100%;
     position: absolute;
     z-index: 200;
     width: 100%;
 }
-#sess-loader-cover{
+
+#sess-loader-cover {
     background: rgba(0, 0, 0, 0.19);
     height: 100%;
     position: absolute;
@@ -350,7 +354,7 @@ li>* {
     margin-top: -64px;
 }
 
-.mdl-spinner{
+.mdl-spinner {
     width: 50px;
     height: 50px;
 }

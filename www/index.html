@@ -2,10 +2,10 @@
 <html>
 
 <head>
-  <title>Cubby Chaser</title>
-  
-<!-- favcon stuff for app icon -->
-  <link rel="icon" type="image/png" sizes="192x192"  href="assets/images/favcons/android-icon-192x192.png">
+  <title>Party Packer</title>
+
+  <!-- favcon stuff for app icon -->
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/images/favcons/android-icon-192x192.png">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favcons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/images/favcons/favicon-96x96.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favcons/favicon-16x16.png">
@@ -13,7 +13,7 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="assets/images/favcons/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
-<!-- end favcon stuff for app icon -->
+  <!-- end favcon stuff for app icon -->
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,23 +23,23 @@
   <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
   <script src="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.js"></script>
   <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.css" />
-  
+
   <!-- firebase login support -->
   <script src="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
   <script src="assets/js/index.js"></script>
-  
+
   <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.3.0/firebaseui.css" />
   <link rel="stylesheet" href="assets/css/core.css">
   <link rel="stylesheet" href="assets/css/animation.css">
-  
+
   <script type="text/javascript">
     // FirebaseUI config.
     var uiConfig = {
       signInSuccessUrl: '/',
       signInOptions: [
         // Leave the lines as is for the providers you want to offer your users.
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID//,
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID //,
         // firebase.auth.EmailAuthProvider.PROVIDER_ID
       ],
       signInFlow: 'popup',
@@ -59,29 +59,29 @@
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
         <!-- Title -->
-        <span class="mdl-layout-title">Cubby Chaser</span>
+        <span class="mdl-layout-title">Party Packer</span>
         <!-- Add spacer, to align navigation to the right -->
         <div class="mdl-layout-spacer"></div>
-   
-      </div>
-    </header>
-    
-    <main class="mdl-layout__content">
-      <div class="page-content">
-          <div class="mdl-cell mdl-cell--12-col mdl-color">
-              <div class="content-grid mdl-grid center-items">
-        <div class="mdl-card mdl-shadow--2dp">
-          <div class="mdl-card__title mdl-card--expand imgtit">
-            <h2 class="mdl-card__title-text login-title">Login</h2>
-          </div>
-        <div id="firebaseui-auth-container"></div>
-        </div>
-      </div>
-          </div>
-      </div>
 
       </div>
-    </main>
+    </header>
+
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <div class="mdl-cell mdl-cell--12-col mdl-color">
+          <div class="content-grid mdl-grid center-items">
+            <div class="mdl-card mdl-shadow--2dp">
+              <div class="mdl-card__title mdl-card--expand imgtit">
+                <h2 class="mdl-card__title-text login-title">Login</h2>
+              </div>
+              <div id="firebaseui-auth-container"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+  </main>
   </div>
 
   <!-- <script src="client.js"></script> -->

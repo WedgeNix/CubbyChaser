@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Cubby Chaser</title>
+    <title>Party Packer</title>
 
     <!-- favcon stuff for app icon -->
     <link rel="icon" type="image/png" sizes="192x192" href="assets/images/favcons/android-icon-192x192.png">
@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="assets/css/core.css">
     <link rel="stylesheet" href="assets/css/animation.css">
-   
+
 </head>
 
 <body>
@@ -31,10 +31,11 @@
         <header class="mdl-layout__header">
             <div class="mdl-layout__header-row">
                 <!-- Title -->
-                <span class="mdl-layout-title">Cubby Chaser</span>
+                <span class="mdl-layout-title">Party Packer</span>
                 <!-- Add spacer, to align navigation to the right -->
                 <!-- Navigation. We hide it in small screens. -->
-                <button id="sess-drop-down" class="mdl-button mdl-js-button mdl-button" style="float:right; margin-left:55px">
+                <button id="sess-drop-down" class="mdl-button mdl-js-button mdl-button"
+                    style="float:right; margin-left:55px">
                     <!-- <i class="material-icons">more_vert</i> -->
                     <span id="sess-drop" class="dropdown-sess">
                         <i class="material-icons">keyboard_arrow_down</i> Sessions </span>
@@ -53,22 +54,25 @@
 
         <main class="mdl-layout__content">
             <div class="page-content">
-                    <div id="main-loader-cover" style="background:rgb(0, 0, 0,.28)" ></div>
-                    <div id="main-loader" class="mdl-spinner mdl-js-spinner is-active"></div>
+                <div id="main-loader-cover" style="background:rgb(0, 0, 0,.28)"></div>
+                <div id="main-loader" class="mdl-spinner mdl-js-spinner is-active"></div>
                 <div class="mdl-cell mdl-cell--2-col">
                     <div class="mdl-card cubby-side mdl-shadow--2dp">
                         <div class="accounts">
                             <div class="sidebar-user-material-content">
                                 <a class="legitRipple">
-                                    <img id="display-image" src="assets/images/placeholder.jpg" class="img-circle img-responsive" alt="">
+                                    <img id="display-image" src="assets/images/placeholder.jpg"
+                                        class="img-circle img-responsive" alt="">
                                 </a>
                                 <h6>
                                     <span id="dislplay-name"></span>
-                                    <button id="user-drop-down" class="mdl-button mdl-js-button mdl-button--icon" style="float:right">
+                                    <button id="user-drop-down" class="mdl-button mdl-js-button mdl-button--icon"
+                                        style="float:right">
                                         <i class="material-icons">more_vert</i>
                                     </button>
                                 </h6>
-                                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="user-drop-down">
+                                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                                    for="user-drop-down">
                                     <li class="mdl-menu__item" onclick="logout()">
                                         <i class="material-icons">power_settings_new</i> logout</li>
                                 </ul>
@@ -99,7 +103,9 @@
                                 <p id="warning-message"></p>
                             </div>
                             <div class="mdl-dialog__actions">
-                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent dialog-button" onclick="closeWarn()">
+                                <button
+                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent dialog-button"
+                                    onclick="closeWarn()">
                                     close
                                 </button>
                             </div>
@@ -115,14 +121,17 @@
                             <div class="mdl-dialog__content">
                                 <span>Would you like to delete the current session for everyone?</span>
 
-                                <button id="delete-sess" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-button--raised">
+                                <button id="delete-sess"
+                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-button--raised">
                                     delete
                                 </button>
-                                <button id="cancel-end" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--raised right-side"
+                                <button id="cancel-end"
+                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--raised right-side"
                                     style="margin-left: 10px;" onclick="closeEnd()">
                                     cancel
                                 </button>
-                                <button id="exit-sess" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary mdl-button--raised right-side">
+                                <button id="exit-sess"
+                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary mdl-button--raised right-side">
                                     exit
                                 </button>
                             </div>
@@ -135,7 +144,9 @@
                             <div id="sess-loader" class="mdl-spinner mdl-js-spinner"></div>
                             <div id="sess-loader-cover" hidden></div>
                             <div id="session-data" class="content-grid mdl-grid session-grid"></div>
-                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent sess-close " onclick="closeSess()">
+                            <button
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent sess-close "
+                                onclick="closeSess()">
                                 close
                             </button>
 
@@ -148,7 +159,8 @@
                     <div class="content-grid mdl-grid">
                         <div id="rip-D0001" class="ripplelink">
                             <div id="D0001" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0001" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0001" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0001" class="mdl-card__actions">
                                     <span class="cubby-name">D0001</span>
                                     <div id="prog-D0001" class="mdl-card__actions mdl-card__progress"></div>
@@ -157,7 +169,8 @@
                         </div>
                         <div id="rip-D0002" class="ripplelink">
                             <div id="D0002" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0002" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0002" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0002" class="mdl-card__actions">
                                     <span class="cubby-name">D0002</span>
                                     <div id="prog-D0002" class="mdl-card__actions mdl-card__progress"></div>
@@ -166,7 +179,8 @@
                         </div>
                         <div id="rip-D0003" class="ripplelink">
                             <div id="D0003" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0003" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0003" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0003" class="mdl-card__actions">
                                     <span class="cubby-name">D0003</span>
                                     <div id="prog-D0003" class="mdl-card__actions mdl-card__progress"></div>
@@ -175,7 +189,8 @@
                         </div>
                         <div id="rip-D0004" class="ripplelink">
                             <div id="D0004" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0004" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0004" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0004" class="mdl-card__actions">
                                     <span class="cubby-name">D0004</span>
                                     <div id="prog-D0004" class="mdl-card__actions mdl-card__progress"></div>
@@ -184,7 +199,8 @@
                         </div>
                         <div id="rip-D0005" class="ripplelink">
                             <div id="D0005" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0005" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0005" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0005" class="mdl-card__actions">
                                     <span class="cubby-name">D0005</span>
                                     <div id="prog-D0005" class="mdl-card__actions mdl-card__progress"></div>
@@ -195,7 +211,8 @@
                     <div class="content-grid mdl-grid">
                         <div id="rip-D0006" class="ripplelink">
                             <div id="D0006" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0006" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0006" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0006" class="mdl-card__actions">
                                     <span class="cubby-name">D0006</span>
                                     <div id="prog-D0006" class="mdl-card__actions mdl-card__progress"></div>
@@ -204,7 +221,8 @@
                         </div>
                         <div id="rip-D0007" class="ripplelink">
                             <div id="D0007" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0007" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0007" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0007" class="mdl-card__actions">
                                     <span class="cubby-name">D0007</span>
                                     <div id="prog-D0007" class="mdl-card__actions mdl-card__progress"></div>
@@ -213,7 +231,8 @@
                         </div>
                         <div id="rip-D0008" class="ripplelink">
                             <div id="D0008" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0008" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0008" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0008" class="mdl-card__actions">
                                     <span class="cubby-name">D0008</span>
                                     <div id="prog-D0008" class="mdl-card__actions mdl-card__progress"></div>
@@ -222,7 +241,8 @@
                         </div>
                         <div id="rip-D0009" class="ripplelink">
                             <div id="D0009" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0009" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0009" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0009" class="mdl-card__actions">
                                     <span class="cubby-name">D0009</span>
                                     <div id="prog-D0009" class="mdl-card__actions mdl-card__progress"></div>
@@ -231,7 +251,8 @@
                         </div>
                         <div id="rip-D0010" class="ripplelink">
                             <div id="D0010" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0010" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0010" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0010" class="mdl-card__actions">
                                     <span class="cubby-name">D0010</span>
                                     <div id="prog-D0010" class="mdl-card__actions mdl-card__progress"></div>
@@ -242,7 +263,8 @@
                     <div class="content-grid mdl-grid">
                         <div id="rip-D0011" class="ripplelink">
                             <div id="D0011" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0011" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0011" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0011" class="mdl-card__actions">
                                     <span class="cubby-name">D0011</span>
                                     <div id="prog-D0011" class="mdl-card__actions mdl-card__progress"></div>
@@ -251,7 +273,8 @@
                         </div>
                         <div id="rip-D0012" class="ripplelink">
                             <div id="D0012" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0012" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0012" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0012" class="mdl-card__actions">
                                     <span class="cubby-name">D0012</span>
                                     <div id="prog-D0012" class="mdl-card__actions mdl-card__progress"></div>
@@ -260,7 +283,8 @@
                         </div>
                         <div id="rip-D0013" class="ripplelink">
                             <div id="D0013" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0013" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0013" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0013" class="mdl-card__actions">
                                     <span class="cubby-name">D0013</span>
                                     <div id="prog-D0013" class="mdl-card__actions mdl-card__progress"></div>
@@ -269,7 +293,8 @@
                         </div>
                         <div id="rip-D0014" class="ripplelink">
                             <div id="D0014" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0014" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0014" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0014" class="mdl-card__actions">
                                     <span class="cubby-name">D0014</span>
                                     <div id="prog-D0014" class="mdl-card__actions mdl-card__progress"></div>
@@ -278,7 +303,8 @@
                         </div>
                         <div id="rip-D0015" class="ripplelink">
                             <div id="D0015" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0015" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0015" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0015" class="mdl-card__actions">
                                     <span class="cubby-name">D0015</span>
                                     <div id="prog-D0015" class="mdl-card__actions mdl-card__progress"></div>
@@ -289,7 +315,8 @@
                     <div class="content-grid mdl-grid">
                         <div id="rip-D0016" class="ripplelink">
                             <div id="D0016" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0016" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0016" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0016" class="mdl-card__actions">
                                     <span class="cubby-name">D0016</span>
                                     <div id="prog-D0016" class="mdl-card__actions mdl-card__progress"></div>
@@ -298,7 +325,8 @@
                         </div>
                         <div id="rip-D0017" class="ripplelink">
                             <div id="D0017" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0017" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0017" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0017" class="mdl-card__actions">
                                     <span class="cubby-name">D0017</span>
                                     <div id="prog-D0017" class="mdl-card__actions mdl-card__progress"></div>
@@ -307,7 +335,8 @@
                         </div>
                         <div id="rip-D0018" class="ripplelink">
                             <div id="D0018" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0018" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0018" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0018" class="mdl-card__actions">
                                     <span class="cubby-name">D0018</span>
                                     <div id="prog-D0018" class="mdl-card__actions mdl-card__progress"></div>
@@ -316,7 +345,8 @@
                         </div>
                         <div id="rip-D0019" class="ripplelink">
                             <div id="D0019" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0019" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0019" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0019" class="mdl-card__actions">
                                     <span class="cubby-name">D0019</span>
                                     <div id="prog-D0019" class="mdl-card__actions mdl-card__progress"></div>
@@ -325,7 +355,8 @@
                         </div>
                         <div id="rip-D0020" class="ripplelink">
                             <div id="D0020" class="mdl-card card-square mdl-shadow--2dp cubby-mdl-card">
-                                <div id="img-D0020" class="mdl-card__title img-title mdl-card--expand clear-class"></div>
+                                <div id="img-D0020" class="mdl-card__title img-title mdl-card--expand clear-class">
+                                </div>
                                 <div id="band-D0020" class="mdl-card__actions">
                                     <span class="cubby-name">D0020</span>
                                     <div id="prog-D0020" class="mdl-card__actions mdl-card__progress"></div>
@@ -340,9 +371,10 @@
     <script src="assets/js/material.min.js"></script>
     <script src="node_modules/clipboard/dist/clipboard.min.js"></script>
     <script src="assets/js/index.js"></script>
-    
+
     <script src="client/client.js.map"></script>
     <script src="client.js.gz"></script>
     <!-- <script src="client.js"></script> -->
 </body>
+
 </html>
